@@ -1,0 +1,7 @@
+.error-main {
+    display: block;
+    margin: auto;
+    color: red;
+    text-align: center;
+    font-size: 24px;
+}

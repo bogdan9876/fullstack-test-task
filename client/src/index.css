@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+  font-family: Aoboshi One;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #EAE9FF;
+}
+
+body.dark {
+  background-color: #333;
+  color: #EAE9FF;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+input {
+  outline: none;
+}
