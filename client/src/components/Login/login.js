@@ -22,8 +22,8 @@ const Login = () => {
   const handleLogin = async (values) => {
     try {
       const response = await axios.post('http://localhost:5000/api/users/login', values);
-      const { access_token } = response.data;
-      localStorage.setItem('accessToken', access_token);
+      const { token } = response.data;
+      localStorage.setItem('accessToken', token);
       navigate('/');
     } catch (error) {
       console.error('Error:', error);
