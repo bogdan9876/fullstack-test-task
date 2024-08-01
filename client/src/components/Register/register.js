@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useSelector, useDispatch } from 'react-redux';
 import ErrorValid from '../ErrorValid/errorValid';
 import './register.css';
 
@@ -27,7 +26,7 @@ const Register = () => {
 
   const handleRegister = async (values) => {
     try {
-      const response = await fetch('', {
+      const response = await fetch('http://localhost:5000/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

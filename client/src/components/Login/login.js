@@ -21,7 +21,7 @@ const Login = () => {
 
   const handleLogin = async (values) => {
     try {
-      const response = await axios.post('https://pulse-tracker-back-6a73aecb4f6b.herokuapp.com/login', values);
+      const response = await axios.post('http://localhost:5000/api/users/login', values);
       const { access_token } = response.data;
       localStorage.setItem('accessToken', access_token);
       navigate('/');
