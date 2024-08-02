@@ -102,7 +102,7 @@ function Home() {
                   </div>
                 </div>
                 <div className={styles.userListLastMessageTime}>
-                  {chat.messages.length > 0 ? new Date(chat.messages[chat.messages.length - 1].timestamp).toLocaleTimeString() : ''}
+                  {chat.messages.length > 0 ? new Date(chat.messages[chat.messages.length - 1].createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : ''}
                 </div>
               </div>
             ))}
