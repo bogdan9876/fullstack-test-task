@@ -23,11 +23,15 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/users/login', values);
       const { token } = response.data;
-      localStorage.setItem('accessToken', token);
-      navigate('/');
+      if (token) {
+        localStorage.setItem('accessToken', token);
+        navigate('/');
+      } else {
+        alert('Login failed. No token received.');
+      }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred');
+      alert('An error occurred. Please try again.');
     }
   };
 

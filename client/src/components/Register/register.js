@@ -39,11 +39,11 @@ const Register = () => {
         localStorage.setItem('registeredPassword', values.password);
         navigate('/login');
       } else {
-        alert(data.error || 'An error occurred');
+        alert(data.error || 'An error occurred during registration');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred');
+      alert('An error occurred during registration. Please try again.');
     }
   };
 

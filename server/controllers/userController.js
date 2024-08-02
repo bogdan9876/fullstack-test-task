@@ -1,6 +1,34 @@
-const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const Chat = require('../models/Chat');
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
+
+const getOrCreateUser = async (username) => {
+  let user = await User.findOne({ username });
+  if (!user) {
+    user = new User({ username, email: `${username}@example.com`, password: 'password' });
+    await user.save();
+  }
+  return user;
+};
+
+const createPredefinedChats = async (userId) => {
+  try {
+    const usernames = ['alice watson', 'Roman pank', 'shura 1'];
+    const predefinedUsers = await Promise.all(usernames.map(username => getOrCreateUser(username)));
+
+    const predefinedChats = predefinedUsers.map(user => ({
+      participants: [userId, user._id]
+    }));
+
+    for (const chat of predefinedChats) {
+      await new Chat(chat).save();
+    }
+  } catch (err) {
+    console.error('Error creating predefined chats:', err);
+  }
+};
 
 const registerUser = async (req, res) => {
   try {
@@ -18,6 +46,8 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
+
+    await createPredefinedChats(newUser._id);
 
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {

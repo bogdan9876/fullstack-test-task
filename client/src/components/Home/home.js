@@ -7,22 +7,39 @@ function Home() {
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const token = localStorage.getItem('accessToken'); // Використовуйте accessToken
 
-  const fetchChats = async () => {
-    try {
-      const response = await axios.get('/api/chats', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
-      setChats(response.data);
-    } catch (error) {
-      console.error('Error fetching chats:', error);
-    }
-  };
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+        const response = await axios.get('http://localhost:5000/api/chats', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setChats(response.data);
+      } catch (error) {
+        console.error('Error fetching chats:', error.response ? error.response.data : error.message);
+      }
+    };
+
+    fetchChats();
+  }, [token]);
 
   const fetchMessages = async (chatId) => {
     try {
-      const response = await axios.get(`/api/chats/${chatId}/messages`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      const response = await axios.get(`http://localhost:5000/api/chats/${chatId}/messages`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setMessages(response.data.messages);
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      console.error('Error fetching messages:', error.response ? error.response.data : error.message);
     }
   };
 
@@ -35,17 +52,24 @@ function Home() {
     if (!newMessage || !selectedChat) return;
 
     try {
-      await axios.post(`/api/chats/${selectedChat._id}/messages`, { text: newMessage }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/messages`, { text: newMessage }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setNewMessage('');
       fetchMessages(selectedChat._id);
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error sending message:', error.response ? error.response.data : error.message);
     }
   };
 
-  useEffect(() => {
-    fetchChats();
-  }, []);
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    window.location.reload();
+  };
 
   return (
     <div className={styles.homeContainer}>
@@ -53,14 +77,12 @@ function Home() {
         <div className={styles.leftPanelHeaderSection}>
           <div className={styles.leftPanelHeader}>
             <img src="/user.svg" alt="User" className={styles.userPhoto} />
-            <button className={styles.logoutButton} onClick={() => localStorage.removeItem('token')}>Log Out</button>
+            <button className={styles.logoutButton} onClick={handleLogout}>Log Out</button>
           </div>
           <input type="text" placeholder="Search or start new chat" className={styles.userInput} />
         </div>
         <div className={styles.leftPanelMain}>
-          <div className={styles.leftPanelChatsWord}>
-            Chats
-          </div>
+          <div className={styles.leftPanelChatsWord}>Chats</div>
           <div className={styles.leftPanelChatsList}>
             {chats.map(chat => (
               <div
@@ -73,10 +95,10 @@ function Home() {
                 </div>
                 <div className={styles.userListInfo}>
                   <div className={styles.userListInfoName}>
-                    {chat.participants.find(p => p._id !== 'your-user-id').username}
+                    {chat.participants[0]?.username}
                   </div>
                   <div className={styles.userListInfoLastMessage}>
-                    {chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].text : ''}
+                    {chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].text : 'No messages yet'}
                   </div>
                 </div>
                 <div className={styles.userListLastMessageTime}>
@@ -92,7 +114,7 @@ function Home() {
           {selectedChat ? (
             <>
               <img src="/user.svg" alt="User" className={styles.rightUserPhoto} />
-              <span className={styles.userName}>{selectedChat.participants.find(p => p._id !== 'your-user-id').username}</span>
+              <span className={styles.userName}>{selectedChat.participants[0]?.username}</span> {/* Спрощено */}
             </>
           ) : (
             <span className={styles.userName}>Select a chat</span>
