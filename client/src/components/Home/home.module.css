@@ -1,44 +1,44 @@
-.home-container {
+.homeContainer {
   display: flex;
   height: 100vh;
 }
 
-.left-panel {
+.leftPanel {
   width: 30%;
   background-color: #ffffff;
   box-sizing: border-box;
 }
 
-.left-panel-header-section {
+.leftPanelHeaderSection {
   background-color: #f0f0f0;
   padding: 20px;
-  border-right: 0.3px solid black;
   border-bottom: 0.3px solid black;
 }
 
-.left-panel-header {
+.leftPanelHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.user-photo {
+.userPhoto {
   width: 50px;
   height: 50px;
   border-radius: 50%;
 }
 
-.logout-button {
-  padding: 10px 20px;
+.logoutButton {
+  padding: 10px 15px;
   background-color: #ff4b5c;
   color: white;
   border: none;
+  font-size: 18px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.user-input {
+.userInput {
   width: 100%;
   padding: 10px;
   margin-top: 10px;
@@ -48,7 +48,7 @@
   font-size: 20px;
 }
 
-.right-panel {
+.rightPanel {
   width: 70%;
   background-color: #ffffff;
   display: flex;
@@ -56,17 +56,17 @@
   box-sizing: border-box;
 }
 
-.left-panel-chats-word {
+.leftPanelChatsWord {
   padding: 20px;
   font-size: 20px;
   color: red;
 }
 
-.paper-plane {
+.paperPlane {
   width: 30px;
 }
 
-.right-panel-header {
+.rightPanelHeader {
   display: flex;
   align-items: center;
   padding-left: 30px;
@@ -74,16 +74,17 @@
   padding-bottom: 20px;
   background-color: #f0f0f0;
   border-bottom: 0.3px solid black;
+  border-left: 0.3px solid black;
 }
 
-.right-user-photo {
+.rightUserPhoto {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   margin-right: 20px;
 }
 
-.user-name {
+.userName {
   font-size: 20px;
   font-weight: bold;
   display: flex;
@@ -91,16 +92,40 @@
   justify-content: center;
 }
 
-.right-panel-main {
+.rightPanelMain {
   flex-grow: 1;
   overflow-y: auto;
+  border-left: 0.3px solid black;
 }
 
-.right-panel-message-input {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.rightPanelMessageInput {
   padding: 10px;
   border-top: 0.3px solid black;
+  border-left: 0.3px solid black;
   background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.messageInput {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+.paperPlane {
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  cursor: pointer;
 }

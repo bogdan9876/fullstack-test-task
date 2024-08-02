@@ -1,5 +1,5 @@
 import React from 'react';
-import './home.css';
+import styles from './home.module.css';
 
 function Home() {
   const handleLogout = () => {
@@ -7,32 +7,35 @@ function Home() {
   };
 
   return (
-    <div className="home-container">
-      <div className="left-panel">
-        <div className="left-panel-header-section">
-          <div className="left-panel-header">
-            <img src="/user.svg" alt="User" className="user-photo" />
-            <button className="logout-button" onClick={handleLogout}>Log Out</button>
+    <div className={styles.homeContainer}>
+      <div className={styles.leftPanel}>
+        <div className={styles.leftPanelHeaderSection}>
+          <div className={styles.leftPanelHeader}>
+            <img src="/user.svg" alt="User" className={styles.userPhoto} />
+            <button className={styles.logoutButton} onClick={handleLogout}>Log Out</button>
           </div>
-          <input type="text" placeholder="Search or start new chat" className="user-input" />
+          <input type="text" placeholder="Search or start new chat" className={styles.userInput} />
         </div>
-        <div className="left-panel-main">
-          <div className="left-panel-chats-word">
+        <div className={styles.leftPanelMain}>
+          <div className={styles.leftPanelChatsWord}>
             Chats
           </div>
-          <div className="left-panel-chats-list">
+          <div className={styles.leftPanelChatsList}>
           </div>
         </div>
       </div>
-      <div className="right-panel">
-        <div className="right-panel-header">
-          <img src="/user.svg" alt="User" className="right-user-photo" />
-          <span className="user-name">Alice Freeman</span>
+      <div className={styles.rightPanel}>
+        <div className={styles.rightPanelHeader}>
+          <img src="/user.svg" alt="User" className={styles.rightUserPhoto} />
+          <span className={styles.userName}>Alice Freeman</span>
         </div>
-        <div className="right-panel-main">
+        <div className={styles.rightPanelMain}>
         </div>
-        <div className="right-panel-message-input">
-          <img src="/paper-plane.svg" alt="plane" className="paper-plane" />
+        <div className={styles.rightPanelMessageInput}>
+          <div className={styles.inputContainer}>
+            <input type="text" placeholder="Type a message..." className={styles.messageInput} />
+            <img src="/paper-plane.svg" alt="Send" className={styles.paperPlane} />
+          </div>
         </div>
       </div>
     </div>
