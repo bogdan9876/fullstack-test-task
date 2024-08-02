@@ -51,6 +51,8 @@
 .right-panel {
   width: 70%;
   background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
 }
 
@@ -87,4 +89,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.right-panel-main {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.right-panel-message-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-top: 0.3px solid black;
+  background-color: #f0f0f0;
 }
