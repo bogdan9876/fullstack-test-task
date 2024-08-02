@@ -12,7 +12,7 @@
 .leftPanelHeaderSection {
   background-color: #f0f0f0;
   padding: 20px;
-  border-bottom: 0.3px solid black;
+  border-bottom: 0.3px solid #ddd;
 }
 
 .leftPanelHeader {
@@ -42,7 +42,7 @@
   width: 100%;
   padding: 10px;
   margin-top: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 10px;
   box-sizing: border-box;
   font-size: 20px;
@@ -73,8 +73,8 @@
   padding-top: 20px;
   padding-bottom: 20px;
   background-color: #f0f0f0;
-  border-bottom: 0.3px solid black;
-  border-left: 0.3px solid black;
+  border-bottom: 0.3px solid #ddd;
+  border-left: 0.3px solid #ddd;
 }
 
 .rightUserPhoto {
@@ -95,13 +95,13 @@
 .rightPanelMain {
   flex-grow: 1;
   overflow-y: auto;
-  border-left: 0.3px solid black;
+  border-left: 0.3px solid #ddd;
 }
 
 .rightPanelMessageInput {
   padding: 10px;
-  border-top: 0.3px solid black;
-  border-left: 0.3px solid black;
+  border-top: 0.3px solid #ddd;
+  border-left: 0.3px solid #ddd;
   background-color: #f0f0f0;
   display: flex;
   justify-content: center;
@@ -128,4 +128,44 @@
   height: 30px;
   margin-left: 10px;
   cursor: pointer;
+}
+
+.userListItem {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.userListPhoto {
+  margin-right: 15px;
+}
+
+.photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.userListInfo {
+  flex-grow: 1;
+  margin-right: 15px;
+}
+
+.userListInfoName {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.userListInfoLastMessage {
+  font-size: 14px;
+  color: #666;
+}
+
+.userListLastMessageTime {
+  font-size: 12px;
+  color: #999;
 }

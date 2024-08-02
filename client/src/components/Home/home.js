@@ -21,6 +21,22 @@ function Home() {
             Chats
           </div>
           <div className={styles.leftPanelChatsList}>
+            <div className={styles.userListItem}>
+              <div className={styles.userListPhoto}>
+                <img src="/user.svg" alt="User" className={styles.photo} />
+              </div>
+              <div className={styles.userListInfo}>
+                <div className={styles.userListInfoName}>
+                  Alice Freeman
+                </div>
+                <div className={styles.userListInfoLastMessage}>
+                  Hey, how's it going?
+                </div>
+              </div>
+              <div className={styles.userListLastMessageTime}>
+                10:45 AM
+              </div>
+            </div>
           </div>
         </div>
       </div>
