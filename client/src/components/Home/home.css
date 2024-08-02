@@ -1,18 +1,76 @@
 .home-container {
-    display: flex;
-    height: 100vh;
-  }
-  
-  .left-panel {
-    width: 30%;
-    background-color: #f0f0f0;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  .right-panel {
-    width: 70%;
-    background-color: #ffffff;
-    padding: 20px;
-    box-sizing: border-box;
-  }
+  display: flex;
+  height: 100vh;
+}
+
+.left-panel {
+  width: 30%;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+.left-panel-header-section {
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+.left-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.user-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.logout-button {
+  padding: 10px 20px;
+  background-color: #ff4b5c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.user-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 20px;
+}
+
+.right-panel {
+  width: 70%;
+  background-color: #ffffff;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.left-panel-chats-word {
+  padding: 20px;
+  font-size: 20px;
+  color: red;
+}
+
+.paper-plane {
+  width: 30px;
+}
+
+.right-user-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-name {
+  font-size: 20px;
+  font-weight: bold;
+}
