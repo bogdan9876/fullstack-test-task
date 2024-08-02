@@ -1,13 +1,12 @@
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const Chat = require('../models/Chat');
 const User = require('../models/User');
+const Chat = require('../models/Chat');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const getOrCreateUser = async (username) => {
   let user = await User.findOne({ username });
   if (!user) {
-    user = new User({ username, email: `${username}@example.com`, password: 'password' });
+    user = new User({ username, email: `${username.toLowerCase().replace(/ /g, '')}@example.com`, password: 'password' });
     await user.save();
   }
   return user;
@@ -15,12 +14,13 @@ const getOrCreateUser = async (username) => {
 
 const createPredefinedChats = async (userId) => {
   try {
-    const usernames = ['alice watson', 'Roman pank', 'shura 1'];
-    const predefinedUsers = await Promise.all(usernames.map(username => getOrCreateUser(username)));
+    const chatNames = ['Alice Freeman', 'Roman Pankevych', 'Zvit Z Kursovoi'];
+    const predefinedUsers = await Promise.all(chatNames.map(name => getOrCreateUser(name)));
 
-    for (const user of predefinedUsers) {
+    for (let i = 0; i < predefinedUsers.length; i++) {
       const chat = new Chat({
-        participants: [userId, user._id]
+        name: chatNames[i],
+        participants: [userId, predefinedUsers[i]._id]
       });
       await chat.save();
     }

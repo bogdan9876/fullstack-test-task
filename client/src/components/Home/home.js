@@ -7,7 +7,7 @@ function Home() {
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const token = localStorage.getItem('accessToken'); // Використовуйте accessToken
+  const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -95,7 +95,7 @@ function Home() {
                 </div>
                 <div className={styles.userListInfo}>
                   <div className={styles.userListInfoName}>
-                    {chat.participants[0]?.username}
+                    {chat.name}
                   </div>
                   <div className={styles.userListInfoLastMessage}>
                     {chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].text : 'No messages yet'}
@@ -114,7 +114,7 @@ function Home() {
           {selectedChat ? (
             <>
               <img src="/user.svg" alt="User" className={styles.rightUserPhoto} />
-              <span className={styles.userName}>{selectedChat.participants[0]?.username}</span> {/* Спрощено */}
+              <span className={styles.userName}>{selectedChat.name}</span>
             </>
           ) : (
             <span className={styles.userName}>Select a chat</span>
