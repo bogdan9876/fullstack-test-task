@@ -64,8 +64,8 @@ const sendMessage = async (req, res) => {
 
     setTimeout(async () => {
       try {
-        const response = await axios.get('https://api.quotable.io/random');
-        const quote = response.data.content;
+        const response = await axios.get('https://zenquotes.io/api/random');
+        const quote = response.data[0].q;
         chat.messages.push({ sender: 'system', text: quote });
         await chat.save();
       } catch (error) {

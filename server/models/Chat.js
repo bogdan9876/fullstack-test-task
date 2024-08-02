@@ -5,7 +5,7 @@ const chatSchema = new Schema({
   name: { type: String, required: true },
   participants: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
   messages: [{
-    sender: { type: Schema.Types.ObjectId, ref: 'User' },
+    sender: { type: String },
     text: String,
     createdAt: { type: Date, default: Date.now }
   }]
