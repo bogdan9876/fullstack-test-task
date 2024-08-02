@@ -62,18 +62,22 @@ const sendMessage = async (req, res) => {
     chat.messages.push({ sender, text });
     await chat.save();
 
-    setTimeout(async () => {
+    const getQuote = async () => {
       try {
         const response = await axios.get('https://zenquotes.io/api/random');
         const quote = response.data[0].q;
         chat.messages.push({ sender: 'system', text: quote });
         await chat.save();
+        return chat.messages;
       } catch (error) {
         console.error('Error fetching quote:', error);
+        return chat.messages;
       }
-    }, 3000);
+    };
 
-    res.status(201).json({ message: 'Message sent successfully' });
+    const updatedMessages = await getQuote();
+    
+    res.status(201).json({ message: 'Message sent successfully', messages: updatedMessages });
   } catch (err) {
     console.error('Error sending message:', err);
     res.status(500).json({ error: 'An error occurred' });

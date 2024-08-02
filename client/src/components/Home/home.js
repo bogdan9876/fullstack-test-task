@@ -56,11 +56,12 @@ function Home() {
         console.error('No token found');
         return;
       }
-      await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/messages`, { text: newMessage }, {
+      const response = await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/messages`, { text: newMessage }, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      setMessages(response.data.messages);
       setNewMessage('');
-      fetchMessages(selectedChat._id);
+      
     } catch (error) {
       console.error('Error sending message:', error.response ? error.response.data : error.message);
     }
