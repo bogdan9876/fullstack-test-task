@@ -2,7 +2,6 @@ import React from 'react';
 import './home.css';
 
 function Home() {
-
   const handleLogout = () => {
     console.log('User logged out');
   };
@@ -18,7 +17,7 @@ function Home() {
           <input type="text" placeholder="Search or start new chat" className="user-input" />
         </div>
         <div className="left-panel-main">
-          <div className="left-panel-chats-word" >
+          <div className="left-panel-chats-word">
             Chats
           </div>
           <div className="left-panel-chats-list">
