@@ -18,12 +18,11 @@ const createPredefinedChats = async (userId) => {
     const usernames = ['alice watson', 'Roman pank', 'shura 1'];
     const predefinedUsers = await Promise.all(usernames.map(username => getOrCreateUser(username)));
 
-    const predefinedChats = predefinedUsers.map(user => ({
-      participants: [userId, user._id]
-    }));
-
-    for (const chat of predefinedChats) {
-      await new Chat(chat).save();
+    for (const user of predefinedUsers) {
+      const chat = new Chat({
+        participants: [userId, user._id]
+      });
+      await chat.save();
     }
   } catch (err) {
     console.error('Error creating predefined chats:', err);
