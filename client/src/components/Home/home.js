@@ -156,12 +156,14 @@ function Home() {
             <>
               <img src="/user.svg" alt="User" className={styles.rightUserPhoto} />
               {isEditing ? (
-                <input
+                <><input
                   type="text"
                   value={editChatName}
                   onChange={(e) => setEditChatName(e.target.value)}
-                  className={styles.editChatInput}
-                />
+                  className={styles.editChatInput} /><div className={styles.editMenu}>
+                    <button className={styles.confirmButton} onClick={handleConfirmEdit}>Confirm</button>
+                    <button className={styles.cancelButton} onClick={() => setIsEditing(false)}>Cancel</button>
+                  </div></>
               ) : (
                 <span className={styles.userName}>{selectedChat.name}</span>
               )}
@@ -201,12 +203,6 @@ function Home() {
           <div className={styles.menu}>
             <div className={styles.menuItem} onClick={handleEditChatName}>Edit chat name</div>
             <div className={styles.menuItem} onClick={handleDeleteChat}>Delete chat</div>
-          </div>
-        )}
-        {isEditing && (
-          <div className={styles.editMenu}>
-            <button className={styles.confirmButton} onClick={handleConfirmEdit}>Confirm</button>
-            <button className={styles.cancelButton} onClick={() => setIsEditing(false)}>Cancel</button>
           </div>
         )}
       </div>

@@ -84,9 +84,35 @@ const sendMessage = async (req, res) => {
   }
 };
 
+const deleteChat = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    await Chat.findByIdAndDelete(chatId);
+    await Message.deleteMany({ chat: chatId });
+    res.status(200).send('Chat deleted successfully');
+  } catch (err) {
+    console.error('Error deleting chat:', err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
+const updateChatName = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const { name } = req.body;
+    const updatedChat = await Chat.findByIdAndUpdate(chatId, { name }, { new: true });
+    res.json(updatedChat);
+  } catch (err) {
+    console.error('Error updating chat name:', err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
 module.exports = {
   createChat,
   getUserChats,
   getChatMessages,
-  sendMessage
+  sendMessage,
+  deleteChat,
+  updateChatName,
 };
