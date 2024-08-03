@@ -1,14 +1,16 @@
 const Chat = require('../models/Chat');
+const User = require('../models/User');
 const axios = require('axios');
 
 const createChat = async (req, res) => {
   try {
-    const { name, participants } = req.body;
+    const { firstName, lastName } = req.body;
 
-    if (!participants || participants.length < 2) {
-      return res.status(400).json({ error: 'At least two participants are required' });
+    if (!firstName || !lastName) {
+      return res.status(400).json({ error: 'Both first name and last name are required' });
     }
-
+    const name = `${firstName} ${lastName}`;
+    const participants = [];
     const existingChat = await Chat.findOne({
       participants: { $all: participants }
     });

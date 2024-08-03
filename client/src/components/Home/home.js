@@ -128,10 +128,10 @@ function Home() {
         console.error('No token found');
         return;
       }
+  
       const response = await axios.post('http://localhost:5000/api/chats/create', {
-        participants: [
-          { firstName: newChatFirstName, lastName: newChatLastName },
-        ]
+        firstName: newChatFirstName,
+        lastName: newChatLastName
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
