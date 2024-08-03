@@ -11,6 +11,7 @@ function Home() {
   const [isEditing, setIsEditing] = useState(false);
   const [editChatName, setEditChatName] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
@@ -118,6 +119,14 @@ function Home() {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredChats = chats.filter(chat =>
+    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className={styles.homeContainer}>
       <div className={styles.leftPanel}>
@@ -126,12 +135,18 @@ function Home() {
             <img src="/user.svg" alt="User" className={styles.userPhoto} />
             <button className={styles.logoutButton} onClick={handleLogout}>Log Out</button>
           </div>
-          <input type="text" placeholder="Search or start new chat" className={styles.userInput} />
+          <input
+            type="text"
+            placeholder="Search or start new chat"
+            className={styles.userInput}
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
         </div>
         <div className={styles.leftPanelMain}>
           <div className={styles.leftPanelChatsWord}>Chats</div>
           <div className={styles.leftPanelChatsList}>
-            {chats.map(chat => (
+            {filteredChats.map(chat => (
               <div
                 key={chat._id}
                 className={styles.userListItem}
