@@ -7,6 +7,9 @@ function Home() {
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [showMenu, setShowMenu] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editChatName, setEditChatName] = useState('');
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
@@ -46,6 +49,7 @@ function Home() {
   const handleChatSelect = (chat) => {
     setSelectedChat(chat);
     fetchMessages(chat._id);
+    setShowMenu(false);
   };
 
   const handleSendMessage = async () => {
@@ -61,7 +65,6 @@ function Home() {
       });
       setMessages(response.data.messages);
       setNewMessage('');
-
     } catch (error) {
       console.error('Error sending message:', error.response ? error.response.data : error.message);
     }
@@ -70,6 +73,43 @@ function Home() {
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     window.location.reload();
+  };
+
+  const handleMenuToggle = () => {
+    setShowMenu(!showMenu);
+  };
+
+  const handleEditChatName = () => {
+    setEditChatName(selectedChat.name);
+    setIsEditing(true);
+    setShowMenu(false);
+  };
+
+  const handleDeleteChat = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/api/chats/${selectedChat._id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setChats(chats.filter(chat => chat._id !== selectedChat._id));
+      setSelectedChat(null);
+      setMessages([]);
+      setShowMenu(false);
+    } catch (error) {
+      console.error('Error deleting chat:', error.response ? error.response.data : error.message);
+    }
+  };
+
+  const handleConfirmEdit = async () => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/chats/${selectedChat._id}`, { name: editChatName }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setChats(chats.map(chat => chat._id === selectedChat._id ? response.data : chat));
+      setSelectedChat(response.data);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating chat name:', error.response ? error.response.data : error.message);
+    }
   };
 
   return (
@@ -115,8 +155,17 @@ function Home() {
           {selectedChat ? (
             <>
               <img src="/user.svg" alt="User" className={styles.rightUserPhoto} />
-              <span className={styles.userName}>{selectedChat.name}</span>
-              <span className={styles.ellipsis}>···</span>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={editChatName}
+                  onChange={(e) => setEditChatName(e.target.value)}
+                  className={styles.editChatInput}
+                />
+              ) : (
+                <span className={styles.userName}>{selectedChat.name}</span>
+              )}
+              <span className={styles.ellipsis} onClick={handleMenuToggle}>···</span>
             </>
           ) : (
             <span className={styles.userName}>Select a chat</span>
@@ -129,23 +178,37 @@ function Home() {
             </div>
           ))}
         </div>
-        <div className={styles.rightPanelMessageInput}>
-          <div className={styles.inputContainer}>
-            <input
-              type="text"
-              placeholder="Type a message..."
-              className={styles.messageInput}
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-            />
-            <img
-              src="/paper-plane.svg"
-              alt="Send"
-              className={styles.paperPlane}
-              onClick={handleSendMessage}
-            />
+        {selectedChat && (
+          <div className={styles.rightPanelMessageInput}>
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                placeholder="Type a message..."
+                className={styles.messageInput}
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+              />
+              <img
+                src="/paper-plane.svg"
+                alt="Send"
+                className={styles.paperPlane}
+                onClick={handleSendMessage}
+              />
+            </div>
           </div>
-        </div>
+        )}
+        {showMenu && (
+          <div className={styles.menu}>
+            <div className={styles.menuItem} onClick={handleEditChatName}>Edit chat name</div>
+            <div className={styles.menuItem} onClick={handleDeleteChat}>Delete chat</div>
+          </div>
+        )}
+        {isEditing && (
+          <div className={styles.editMenu}>
+            <button className={styles.confirmButton} onClick={handleConfirmEdit}>Confirm</button>
+            <button className={styles.cancelButton} onClick={() => setIsEditing(false)}>Cancel</button>
+          </div>
+        )}
       </div>
     </div>
   );
