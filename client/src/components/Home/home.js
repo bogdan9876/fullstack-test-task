@@ -10,6 +10,7 @@ function Home() {
   const [showMenu, setShowMenu] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editChatName, setEditChatName] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
@@ -85,7 +86,12 @@ function Home() {
     setShowMenu(false);
   };
 
-  const handleDeleteChat = async () => {
+  const handleDeleteChat = () => {
+    setShowConfirmModal(true);
+    setShowMenu(false);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
       await axios.delete(`http://localhost:5000/api/chats/${selectedChat._id}`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -93,7 +99,7 @@ function Home() {
       setChats(chats.filter(chat => chat._id !== selectedChat._id));
       setSelectedChat(null);
       setMessages([]);
-      setShowMenu(false);
+      setShowConfirmModal(false);
     } catch (error) {
       console.error('Error deleting chat:', error.response ? error.response.data : error.message);
     }
@@ -156,14 +162,18 @@ function Home() {
             <>
               <img src="/user.svg" alt="User" className={styles.rightUserPhoto} />
               {isEditing ? (
-                <><input
-                  type="text"
-                  value={editChatName}
-                  onChange={(e) => setEditChatName(e.target.value)}
-                  className={styles.editChatInput} /><div className={styles.editMenu}>
+                <>
+                  <input
+                    type="text"
+                    value={editChatName}
+                    onChange={(e) => setEditChatName(e.target.value)}
+                    className={styles.editChatInput}
+                  />
+                  <div className={styles.editMenu}>
                     <button className={styles.confirmButton} onClick={handleConfirmEdit}>Confirm</button>
                     <button className={styles.cancelButton} onClick={() => setIsEditing(false)}>Cancel</button>
-                  </div></>
+                  </div>
+                </>
               ) : (
                 <span className={styles.userName}>{selectedChat.name}</span>
               )}
@@ -206,6 +216,15 @@ function Home() {
           </div>
         )}
       </div>
+      {showConfirmModal && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <p>Are you sure you want to delete this chat?</p>
+            <button className={`${styles.modalButton} ${styles.modalConfirm}`} onClick={handleConfirmDelete}>Confirm</button>
+            <button className={`${styles.modalButton} ${styles.modalCancel}`} onClick={() => setShowConfirmModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
