@@ -46,7 +46,13 @@ function Home() {
       const response = await axios.get(`http://localhost:5000/api/chats/${chatId}/messages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setMessages(response.data.messages);
+      // Фільтрація унікальних повідомлень
+      const uniqueMessages = response.data.messages.filter((message, index, self) =>
+        index === self.findIndex((m) => (
+          m.text === message.text && new Date(m.createdAt).toString() === new Date(message.createdAt).toString()
+        ))
+      );
+      setMessages(uniqueMessages);
     } catch (error) {
       console.error('Error fetching messages:', error.response ? error.response.data : error.message);
     }
@@ -69,7 +75,13 @@ function Home() {
       const response = await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/messages`, { text: newMessage }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setMessages(response.data.messages);
+      // Фільтрація унікальних повідомлень
+      const uniqueMessages = response.data.messages.filter((message, index, self) =>
+        index === self.findIndex((m) => (
+          m.text === message.text && new Date(m.createdAt).toString() === new Date(message.createdAt).toString()
+        ))
+      );
+      setMessages(uniqueMessages);
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error.response ? error.response.data : error.message);
@@ -133,7 +145,11 @@ function Home() {
         console.error('No token found');
         return;
       }
-  
+      if (!newChatFirstName || !newChatLastName) {
+        console.error('Both first name and last name are required');
+        return;
+      }
+
       const response = await axios.post('http://localhost:5000/api/chats/create', {
         firstName: newChatFirstName,
         lastName: newChatLastName
@@ -232,8 +248,17 @@ function Home() {
         </div>
         <div className={styles.rightPanelMain}>
           {selectedChat && messages.map((msg, index) => (
-            <div key={index} className={styles.message}>
-              <strong>{msg.sender.username}</strong>: {msg.text}
+            <div
+              key={index}
+              className={`${styles.message} ${msg.sender._id === token ? styles.currentUser : styles.otherUser}`}
+            >
+              {msg.text.startsWith('Quote:') ? (
+                <div className={styles.quoteMessage}>{msg.text}</div>
+              ) : (
+                <>
+                  <strong>{msg.sender.username}: </strong>{msg.text}
+                </>
+              )}
             </div>
           ))}
         </div>

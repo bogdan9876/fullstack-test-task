@@ -86,7 +86,8 @@ const sendMessage = async (req, res) => {
       try {
         const response = await axios.get('https://zenquotes.io/api/random');
         const quote = response.data[0].q;
-        chat.messages.push({ sender: 'system', text: quote });
+        const quoteMessage = { sender, text: `Quote: ${quote}` };
+        chat.messages.push(quoteMessage);
         await chat.save();
         return chat.messages;
       } catch (error) {
@@ -96,7 +97,6 @@ const sendMessage = async (req, res) => {
     };
 
     const updatedMessages = await getQuote();
-    
     res.status(201).json({ message: 'Message sent successfully', messages: updatedMessages });
   } catch (err) {
     console.error('Error sending message:', err);

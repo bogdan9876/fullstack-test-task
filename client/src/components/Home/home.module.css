@@ -86,6 +86,33 @@
   margin-right: 20px;
 }
 
+.message {
+  padding: 10px;
+  border-radius: 15px;
+  margin: 10px 0;
+  max-width: 80%;
+  clear: both;
+}
+
+.currentUser {
+  background-color: #dcf8c6;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.otherUser {
+  background-color: #ffffff;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.quoteMessage {
+  font-style: italic;
+  border-left: 2px solid #ccc;
+  padding-left: 10px;
+  margin: 5px 0;
+}
+
 .userName {
   font-size: 20px;
   font-weight: bold;
