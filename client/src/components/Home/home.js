@@ -15,6 +15,7 @@ function Home() {
   const [newChatFirstName, setNewChatFirstName] = useState('');
   const [newChatLastName, setNewChatLastName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
@@ -76,6 +77,10 @@ function Home() {
   };
 
   const handleLogout = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const handleConfirmLogout = () => {
     localStorage.removeItem('accessToken');
     window.location.reload();
   };
@@ -289,6 +294,15 @@ function Home() {
               <button className={`${styles.modalButton} ${styles.modalConfirm}`} onClick={handleCreateChat}>Create</button>
               <button className={`${styles.modalButton} ${styles.modalCancel}`} onClick={() => setShowCreateChatModal(false)}>Cancel</button>
             </div>
+          </div>
+        </div>
+      )}
+      {showLogoutConfirm && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <p>Are you sure you want to log out?</p>
+            <button className={`${styles.modalButton} ${styles.modalConfirm}`} onClick={handleConfirmLogout}>Confirm</button>
+            <button className={`${styles.modalButton} ${styles.modalCancel}`} onClick={() => setShowLogoutConfirm(false)}>Cancel</button>
           </div>
         </div>
       )}

@@ -5,12 +5,22 @@ const axios = require('axios');
 const createChat = async (req, res) => {
   try {
     const { firstName, lastName } = req.body;
+    const creatorId = req.user.id;
 
     if (!firstName || !lastName) {
       return res.status(400).json({ error: 'Both first name and last name are required' });
     }
-    const name = `${firstName} ${lastName}`;
-    const participants = [];
+
+    const name = `${firstName} ${lastName}`.toLowerCase().replace(/\s+/g, '');
+
+    let user = await User.findOne({ username: name });
+    if (!user) {
+      user = new User({ username: name, email: `${name}@example.com`, password: 'defaultPassword' });
+      await user.save();
+    }
+
+    const participants = [creatorId, user._id];
+
     const existingChat = await Chat.findOne({
       participants: { $all: participants }
     });
@@ -19,7 +29,7 @@ const createChat = async (req, res) => {
       return res.status(200).json({ message: 'Chat already exists', chat: existingChat });
     }
 
-    const chat = new Chat({ name, participants });
+    const chat = new Chat({ name: `${firstName} ${lastName}`, participants });
     await chat.save();
 
     res.status(201).json({ message: 'Chat created successfully', chat });
