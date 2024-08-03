@@ -69,9 +69,11 @@
 .rightPanelHeader {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding-left: 30px;
   padding-top: 20px;
   padding-bottom: 20px;
+  padding-right: 30px;
   background-color: #f0f0f0;
   border-bottom: 0.3px solid #ddd;
   border-left: 0.3px solid #ddd;
@@ -87,9 +89,11 @@
 .userName {
   font-size: 20px;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+}
+
+.ellipsis {
+  margin-left: auto;
+  font-size: 40px;
 }
 
 .rightPanelMain {

@@ -61,7 +61,7 @@ function Home() {
       });
       setMessages(response.data.messages);
       setNewMessage('');
-      
+
     } catch (error) {
       console.error('Error sending message:', error.response ? error.response.data : error.message);
     }
@@ -116,6 +116,7 @@ function Home() {
             <>
               <img src="/user.svg" alt="User" className={styles.rightUserPhoto} />
               <span className={styles.userName}>{selectedChat.name}</span>
+              <span className={styles.ellipsis}>···</span>
             </>
           ) : (
             <span className={styles.userName}>Select a chat</span>
