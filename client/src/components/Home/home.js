@@ -11,7 +11,10 @@ function Home() {
   const [isEditing, setIsEditing] = useState(false);
   const [editChatName, setEditChatName] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [showCreateChatModal, setShowCreateChatModal] = useState(false);
+  const [newChatFirstName, setNewChatFirstName] = useState('');
+  const [newChatLastName, setNewChatLastName] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
@@ -119,12 +122,30 @@ function Home() {
     }
   };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+  const handleCreateChat = async () => {
+    try {
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      const response = await axios.post('http://localhost:5000/api/chats/create', {
+        participants: [
+          { firstName: newChatFirstName, lastName: newChatLastName },
+        ]
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setChats([...chats, response.data.chat]);
+      setShowCreateChatModal(false);
+      setNewChatFirstName('');
+      setNewChatLastName('');
+    } catch (error) {
+      console.error('Error creating chat:', error.response ? error.response.data : error.message);
+    }
   };
 
   const filteredChats = chats.filter(chat =>
-    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
+    chat.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -139,35 +160,41 @@ function Home() {
             type="text"
             placeholder="Search or start new chat"
             className={styles.userInput}
-            value={searchTerm}
-            onChange={handleSearchChange}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div className={styles.leftPanelMain}>
           <div className={styles.leftPanelChatsWord}>Chats</div>
           <div className={styles.leftPanelChatsList}>
-            {filteredChats.map(chat => (
-              <div
-                key={chat._id}
-                className={styles.userListItem}
-                onClick={() => handleChatSelect(chat)}
-              >
-                <div className={styles.userListPhoto}>
-                  <img src="/user.svg" alt="User" className={styles.photo} />
-                </div>
-                <div className={styles.userListInfo}>
-                  <div className={styles.userListInfoName}>
-                    {chat.name}
+            {filteredChats.length > 0 ? (
+              filteredChats.map(chat => (
+                <div
+                  key={chat._id}
+                  className={styles.userListItem}
+                  onClick={() => handleChatSelect(chat)}
+                >
+                  <div className={styles.userListPhoto}>
+                    <img src="/user.svg" alt="User" className={styles.photo} />
                   </div>
-                  <div className={styles.userListInfoLastMessage}>
-                    {chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].text : 'No messages yet'}
+                  <div className={styles.userListInfo}>
+                    <div className={styles.userListInfoName}>
+                      {chat.name}
+                    </div>
+                    <div className={styles.userListInfoLastMessage}>
+                      {chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].text : 'No messages yet'}
+                    </div>
+                  </div>
+                  <div className={styles.userListLastMessageTime}>
+                    {chat.messages.length > 0 ? new Date(chat.messages[chat.messages.length - 1].createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : ''}
                   </div>
                 </div>
-                <div className={styles.userListLastMessageTime}>
-                  {chat.messages.length > 0 ? new Date(chat.messages[chat.messages.length - 1].createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : ''}
-                </div>
+              ))
+            ) : (
+              <div className={styles.createChatPrompt}>
+                No chats found. <button onClick={() => setShowCreateChatModal(true)}>Create Chat</button>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
@@ -237,6 +264,31 @@ function Home() {
             <p>Are you sure you want to delete this chat?</p>
             <button className={`${styles.modalButton} ${styles.modalConfirm}`} onClick={handleConfirmDelete}>Confirm</button>
             <button className={`${styles.modalButton} ${styles.modalCancel}`} onClick={() => setShowConfirmModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+      {showCreateChatModal && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h2>Create New Chat</h2>
+            <input
+              type="text"
+              placeholder="First Name"
+              value={newChatFirstName}
+              onChange={(e) => setNewChatFirstName(e.target.value)}
+              className={styles.modalInput}
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={newChatLastName}
+              onChange={(e) => setNewChatLastName(e.target.value)}
+              className={styles.modalInput}
+            />
+            <div className={styles.modalButtons}>
+              <button className={`${styles.modalButton} ${styles.modalConfirm}`} onClick={handleCreateChat}>Create</button>
+              <button className={`${styles.modalButton} ${styles.modalCancel}`} onClick={() => setShowCreateChatModal(false)}>Cancel</button>
+            </div>
           </div>
         </div>
       )}

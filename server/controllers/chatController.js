@@ -3,13 +3,21 @@ const axios = require('axios');
 
 const createChat = async (req, res) => {
   try {
-    const { participants } = req.body;
+    const { name, participants } = req.body;
 
     if (!participants || participants.length < 2) {
       return res.status(400).json({ error: 'At least two participants are required' });
     }
 
-    const chat = new Chat({ participants });
+    const existingChat = await Chat.findOne({
+      participants: { $all: participants }
+    });
+
+    if (existingChat) {
+      return res.status(200).json({ message: 'Chat already exists', chat: existingChat });
+    }
+
+    const chat = new Chat({ name, participants });
     await chat.save();
 
     res.status(201).json({ message: 'Chat created successfully', chat });
@@ -88,7 +96,6 @@ const deleteChat = async (req, res) => {
   try {
     const { chatId } = req.params;
     await Chat.findByIdAndDelete(chatId);
-    await Message.deleteMany({ chat: chatId });
     res.status(200).send('Chat deleted successfully');
   } catch (err) {
     console.error('Error deleting chat:', err);
