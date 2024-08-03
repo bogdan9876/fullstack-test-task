@@ -10,7 +10,7 @@
 
 .register {
     font-size: 60px;
-    margin-bottom: 2rem;
+    margin-top: 3rem;
     text-align: center;
 }
 
@@ -35,7 +35,6 @@
     margin: 0 auto;
     padding: 20px;
     text-align: center;
-    margin-top: 2rem;
 }
 
 .register-text {

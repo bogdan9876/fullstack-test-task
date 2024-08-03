@@ -314,9 +314,10 @@
 
 .modalInput {
   display: block;
-  width: 100%;
+  width: 95%;
   margin: 10px 0;
   padding: 10px;
+  font-size: 18px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }

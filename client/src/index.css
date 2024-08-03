@@ -3,12 +3,7 @@ body {
   font-family: Aoboshi One;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #EAE9FF;
-}
-
-body.dark {
-  background-color: #333;
-  color: #EAE9FF;
+  background-color: #f0f0f0;
 }
 
 code {
