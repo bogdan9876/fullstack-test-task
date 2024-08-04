@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import styles from './home.module.css';
 
 function Home() {
@@ -46,7 +47,6 @@ function Home() {
       const response = await axios.get(`http://localhost:5000/api/chats/${chatId}/messages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      // Фільтрація унікальних повідомлень
       const uniqueMessages = response.data.messages.filter((message, index, self) =>
         index === self.findIndex((m) => (
           m.text === message.text && new Date(m.createdAt).toString() === new Date(message.createdAt).toString()
@@ -76,6 +76,7 @@ function Home() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessages([...messages, response.data.newMessage]);
+      toast.info(`U have a new message: ${response.data.newMessage.text}`);
       setNewMessage('');
       setTimeout(async () => {
         try {
