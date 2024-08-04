@@ -79,7 +79,7 @@ const sendMessage = async (req, res) => {
       return res.status(404).json({ error: 'Chat not found' });
     }
 
-    const newMessage = { sender, text, isQuote: false };
+    const newMessage = { sender, text, isQuote: false }; // Set isQuote to false
     chat.messages.push(newMessage);
     await chat.save();
 
@@ -103,14 +103,13 @@ const sendQuote = async (req, res) => {
     const response = await axios.get('https://zenquotes.io/api/random');
     const quote = response.data[0].q;
 
-    // Find or create a "system" user for quotes
     let systemUser = await User.findOne({ username: 'system' });
     if (!systemUser) {
       systemUser = new User({ username: 'system', email: 'system@example.com', password: 'defaultPassword' });
       await systemUser.save();
     }
 
-    const quoteMessage = { sender: systemUser._id, text: `Quote: ${quote}`, isQuote: true };
+    const quoteMessage = { sender: systemUser._id, text: quote, isQuote: true }; // Set isQuote to true
     chat.messages.push(quoteMessage);
     await chat.save();
 

@@ -77,7 +77,7 @@ function Home() {
       });
       setMessages([...messages, response.data.newMessage]);
       setNewMessage('');
-        setTimeout(async () => {
+      setTimeout(async () => {
         try {
           const quoteResponse = await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/quote`, {}, {
             headers: { Authorization: `Bearer ${token}` }
@@ -254,13 +254,13 @@ function Home() {
           {selectedChat && messages.map((msg, index) => (
             <div
               key={index}
-              className={`${styles.message} ${msg.sender._id === token ? styles.currentUser : styles.otherUser}`}
+              className={`${styles.message} ${msg.sender._id === token ? styles.currentUser : styles.chatMessage}`}
             >
-              {msg.text.startsWith('Quote:') ? (
+              {msg.isQuote ? (
                 <div className={styles.quoteMessage}>{msg.text}</div>
               ) : (
                 <>
-                  <strong>{msg.sender.username}: </strong>{msg.text}
+                  {msg.text}
                 </>
               )}
             </div>

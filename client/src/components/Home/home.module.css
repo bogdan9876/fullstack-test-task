@@ -94,13 +94,8 @@
   clear: both;
 }
 
-.currentUser {
-  background-color: #dcf8c6;
-  align-self: flex-end;
-  text-align: right;
-}
 
-.otherUser {
+.chatMessage {
   background-color: #ffffff;
   align-self: flex-start;
   text-align: left;
