@@ -254,15 +254,11 @@ function Home() {
           {selectedChat && messages.map((msg, index) => (
             <div
               key={index}
-              className={`${styles.message}`}
+              className={msg.isQuote ? styles.quoteMessageContainer : styles.chatMessageContainer}
             >
-              {msg.isQuote ? (
-                <div className={styles.quoteMessage}>{msg.text}</div>
-              ) : (
-                <div className={styles.chatMessage}>
-                  {msg.text}
-                </div>
-              )}
+              <div className={msg.isQuote ? styles.quoteMessage : styles.chatMessage}>
+                {msg.text}
+              </div>
             </div>
           ))}
         </div>
