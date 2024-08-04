@@ -66,7 +66,7 @@ function Home() {
 
   const handleSendMessage = async () => {
     if (!newMessage || !selectedChat) return;
-  
+
     try {
       if (!token) {
         console.error('No token found');
@@ -77,10 +77,19 @@ function Home() {
       });
       const sentMessage = response.data.newMessage;
       setMessages(prevMessages => [...prevMessages, sentMessage]);
+      
+      // Update the chat with the new message
+      setChats(chats.map(chat =>
+        chat._id === selectedChat._id
+          ? { ...chat, messages: [...chat.messages, sentMessage] }
+          : chat
+      ));
+      
       if (sentMessage.isQuote) {
         toast.info(`You have a new message: ${sentMessage.text}`);
       }
       setNewMessage('');
+
       setTimeout(async () => {
         try {
           const quoteResponse = await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/quote`, {}, {
@@ -88,7 +97,14 @@ function Home() {
           });
           const quoteMessage = quoteResponse.data.quoteMessage;
           setMessages(prevMessages => [...prevMessages, quoteMessage]);
-  
+
+          // Update the chat with the new quote
+          setChats(chats.map(chat =>
+            chat._id === selectedChat._id
+              ? { ...chat, messages: [...chat.messages, quoteMessage] }
+              : chat
+          ));
+
           if (quoteMessage.isQuote) {
             toast.info(`New quoted message: ${quoteMessage.text}`);
           }
