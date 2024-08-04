@@ -86,23 +86,46 @@
   margin-right: 20px;
 }
 
+
+/* Повідомлення в чаті */
 .message {
-  padding: 10px;
-  border-radius: 15px;
-  margin: 10px 0;
-  max-width: 80%;
-  clear: both;
+  display: flex;
+  margin: 5px 0;
 }
 
 .chatMessage {
   align-self: flex-end;
-  text-align: left;
+  text-align: right;
   font-size: 20px;
+  background-color: #1ea1b3;
+  border-radius: 15px;
+  padding: 10px;
+  margin-right: 30px;
 }
 
 .quoteMessage {
+  align-self: flex-start;
+  text-align: left;
   font-size: 20px;
+  background-color: #7cac42;
+  border-radius: 15px;
+  padding: 10px;
+  margin-left: 30px;
+  margin-top: 1rem;
 }
+
+.chatMessageContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem 0;
+}
+
+.quoteMessageContainer {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Повідомлення в чаті (кінець)*/
 
 .userName {
   font-size: 20px;
@@ -121,6 +144,7 @@
   flex-grow: 1;
   overflow-y: auto;
   border-left: 0.3px solid #ddd;
+  margin-top: 2rem;
 }
 
 .rightPanelMessageInput {
