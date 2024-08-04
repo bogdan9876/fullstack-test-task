@@ -249,7 +249,8 @@ function Home() {
               ))
             ) : (
               <div className={styles.createChatPrompt}>
-                No chats found. <button onClick={() => setShowCreateChatModal(true)}>Create Chat</button>
+                <div className={styles.createChatPromptQ}>No chats found. </div>
+                <button onClick={() => setShowCreateChatModal(true)}>Create Chat</button>
               </div>
             )}
           </div>

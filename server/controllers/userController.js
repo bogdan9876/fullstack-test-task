@@ -14,7 +14,7 @@ const getOrCreateUser = async (username) => {
 
 const createPredefinedChats = async (userId) => {
   try {
-    const chatNames = ['Alice Freeman', 'Roman Pankevych', 'Zvit Z Kursovoi'];
+    const chatNames = ['Alice Freeman', 'Roman Pankevych', 'Hola Madrid'];
     const predefinedUsers = await Promise.all(chatNames.map(name => getOrCreateUser(name)));
 
     for (let i = 0; i < predefinedUsers.length; i++) {
