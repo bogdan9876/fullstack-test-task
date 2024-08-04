@@ -258,6 +258,9 @@ function Home() {
             >
               <div className={msg.isQuote ? styles.quoteMessage : styles.chatMessage}>
                 {msg.text}
+                <div className={styles.timestamp}>
+                  {new Date(msg.createdAt).toLocaleTimeString()}
+                </div>
               </div>
             </div>
           ))}

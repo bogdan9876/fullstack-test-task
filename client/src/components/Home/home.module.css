@@ -90,13 +90,14 @@
 /* Повідомлення в чаті */
 .message {
   display: flex;
+  flex-direction: column; /* Вирівнює повідомлення і timestamp вертикально */
   margin: 5px 0;
 }
 
 .chatMessage {
   align-self: flex-end;
   text-align: right;
-  font-size: 20px;
+  font-size: 22px;
   background-color: #1ea1b3;
   border-radius: 15px;
   padding: 10px;
@@ -106,7 +107,7 @@
 .quoteMessage {
   align-self: flex-start;
   text-align: left;
-  font-size: 20px;
+  font-size: 22px;
   background-color: #7cac42;
   border-radius: 15px;
   padding: 10px;
@@ -114,15 +115,19 @@
   margin-top: 1rem;
 }
 
-.chatMessageContainer {
+.chatMessageContainer,
+.quoteMessageContainer {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   margin: 1rem 0;
 }
 
-.quoteMessageContainer {
-  display: flex;
-  justify-content: flex-start;
+.timestamp {
+  font-size: 14px;
+  color: #ffffff;
+  text-align: right;
+  margin-top: 5px;
+  align-self: flex-end;
 }
 
 /* Повідомлення в чаті (кінець)*/
