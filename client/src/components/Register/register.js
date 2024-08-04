@@ -5,6 +5,8 @@ import * as Yup from 'yup';
 import ErrorValid from '../ErrorValid/errorValid';
 import './register.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Register = () => {
   const navigate = useNavigate();
 
@@ -26,7 +28,7 @@ const Register = () => {
 
   const handleRegister = async (values) => {
     try {
-      const response = await fetch('http://localhost:5000/api/users/register', {
+      const response = await fetch(`${API_URL}/users/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

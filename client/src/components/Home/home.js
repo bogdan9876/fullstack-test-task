@@ -3,6 +3,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import styles from './home.module.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function Home() {
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
@@ -26,7 +28,7 @@ function Home() {
           console.error('No token found');
           return;
         }
-        const response = await axios.get('http://localhost:5000/api/chats', {
+        const response = await axios.get(`${API_URL}/chats`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setChats(response.data);
@@ -44,7 +46,7 @@ function Home() {
         console.error('No token found');
         return;
       }
-      const response = await axios.get(`http://localhost:5000/api/chats/${chatId}/messages`, {
+      const response = await axios.get(`${API_URL}/chats/${chatId}/messages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const uniqueMessages = response.data.messages.filter((message, index, self) =>
@@ -72,7 +74,7 @@ function Home() {
         console.error('No token found');
         return;
       }
-      const response = await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/messages`, { text: newMessage }, {
+      const response = await axios.post(`${API_URL}/chats/${selectedChat._id}/messages`, { text: newMessage }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const sentMessage = response.data.newMessage;
@@ -92,7 +94,7 @@ function Home() {
 
       setTimeout(async () => {
         try {
-          const quoteResponse = await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/quote`, {}, {
+          const quoteResponse = await axios.post(`${API_URL}/chats/${selectedChat._id}/quote`, {}, {
             headers: { Authorization: `Bearer ${token}` }
           });
           const quoteMessage = quoteResponse.data.quoteMessage;
@@ -143,7 +145,7 @@ function Home() {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/chats/${selectedChat._id}`, {
+      await axios.delete(`${API_URL}/chats/${selectedChat._id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setChats(chats.filter(chat => chat._id !== selectedChat._id));
@@ -157,7 +159,7 @@ function Home() {
 
   const handleConfirmEdit = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/chats/${selectedChat._id}`, { name: editChatName }, {
+      const response = await axios.put(`${API_URL}/chats/${selectedChat._id}`, { name: editChatName }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setChats(chats.map(chat => chat._id === selectedChat._id ? response.data : chat));
@@ -179,7 +181,7 @@ function Home() {
         return;
       }
 
-      const response = await axios.post('http://localhost:5000/api/chats/create', {
+      const response = await axios.post(`${API_URL}/chats/create`, {
         firstName: newChatFirstName,
         lastName: newChatLastName
       }, {

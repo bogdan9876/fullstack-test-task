@@ -6,6 +6,8 @@ import * as Yup from 'yup';
 import ErrorValid from '../ErrorValid/errorValid';
 import './login.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Login = () => {
   const navigate = useNavigate();
  
@@ -21,7 +23,7 @@ const Login = () => {
 
   const handleLogin = async (values) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/users/login', values);
+      const response = await axios.post(`${API_URL}/users/login`, values);
       const { token } = response.data;
       if (token) {
         localStorage.setItem('accessToken', token);
