@@ -75,14 +75,18 @@ function Home() {
       const response = await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/messages`, { text: newMessage }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      // Фільтрація унікальних повідомлень
-      const uniqueMessages = response.data.messages.filter((message, index, self) =>
-        index === self.findIndex((m) => (
-          m.text === message.text && new Date(m.createdAt).toString() === new Date(message.createdAt).toString()
-        ))
-      );
-      setMessages(uniqueMessages);
+      setMessages([...messages, response.data.newMessage]);
       setNewMessage('');
+        setTimeout(async () => {
+        try {
+          const quoteResponse = await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/quote`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setMessages([...messages, response.data.newMessage, quoteResponse.data.quoteMessage]);
+        } catch (quoteError) {
+          console.error('Error fetching quote:', quoteError.response ? quoteError.response.data : quoteError.message);
+        }
+      }, 3000);
     } catch (error) {
       console.error('Error sending message:', error.response ? error.response.data : error.message);
     }

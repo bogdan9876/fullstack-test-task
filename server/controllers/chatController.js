@@ -79,27 +79,36 @@ const sendMessage = async (req, res) => {
       return res.status(404).json({ error: 'Chat not found' });
     }
 
-    chat.messages.push({ sender, text });
+    const newMessage = { sender, text };
+    chat.messages.push(newMessage);
     await chat.save();
 
-    const getQuote = async () => {
-      try {
-        const response = await axios.get('https://zenquotes.io/api/random');
-        const quote = response.data[0].q;
-        const quoteMessage = { sender, text: `Quote: ${quote}` };
-        chat.messages.push(quoteMessage);
-        await chat.save();
-        return chat.messages;
-      } catch (error) {
-        console.error('Error fetching quote:', error);
-        return chat.messages;
-      }
-    };
-
-    const updatedMessages = await getQuote();
-    res.status(201).json({ message: 'Message sent successfully', messages: updatedMessages });
+    res.status(201).json({ message: 'Message sent successfully', newMessage });
   } catch (err) {
     console.error('Error sending message:', err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
+const sendQuote = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+    const sender = req.user.id;
+
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+      return res.status(404).json({ error: 'Chat not found' });
+    }
+
+    const response = await axios.get('https://zenquotes.io/api/random');
+    const quote = response.data[0].q;
+    const quoteMessage = { sender, text: `Quote: ${quote}` };
+    chat.messages.push(quoteMessage);
+    await chat.save();
+
+    res.status(201).json({ message: 'Quote sent successfully', quoteMessage });
+  } catch (error) {
+    console.error('Error fetching quote:', error);
     res.status(500).json({ error: 'An error occurred' });
   }
 };
@@ -129,6 +138,7 @@ const updateChatName = async (req, res) => {
 
 module.exports = {
   createChat,
+  sendQuote,
   getUserChats,
   getChatMessages,
   sendMessage,
