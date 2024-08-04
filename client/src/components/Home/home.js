@@ -66,7 +66,7 @@ function Home() {
 
   const handleSendMessage = async () => {
     if (!newMessage || !selectedChat) return;
-
+  
     try {
       if (!token) {
         console.error('No token found');
@@ -75,15 +75,23 @@ function Home() {
       const response = await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/messages`, { text: newMessage }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setMessages([...messages, response.data.newMessage]);
-      toast.info(`U have a new message: ${response.data.newMessage.text}`);
+      const sentMessage = response.data.newMessage;
+      setMessages(prevMessages => [...prevMessages, sentMessage]);
+      if (sentMessage.isQuote) {
+        toast.info(`You have a new message: ${sentMessage.text}`);
+      }
       setNewMessage('');
       setTimeout(async () => {
         try {
           const quoteResponse = await axios.post(`http://localhost:5000/api/chats/${selectedChat._id}/quote`, {}, {
             headers: { Authorization: `Bearer ${token}` }
           });
-          setMessages([...messages, response.data.newMessage, quoteResponse.data.quoteMessage]);
+          const quoteMessage = quoteResponse.data.quoteMessage;
+          setMessages(prevMessages => [...prevMessages, quoteMessage]);
+  
+          if (quoteMessage.isQuote) {
+            toast.info(`New quoted message: ${quoteMessage.text}`);
+          }
         } catch (quoteError) {
           console.error('Error fetching quote:', quoteError.response ? quoteError.response.data : quoteError.message);
         }
