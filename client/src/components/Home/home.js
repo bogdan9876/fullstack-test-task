@@ -77,14 +77,14 @@ function Home() {
       });
       const sentMessage = response.data.newMessage;
       setMessages(prevMessages => [...prevMessages, sentMessage]);
-      
+
       // Update the chat with the new message
       setChats(chats.map(chat =>
         chat._id === selectedChat._id
           ? { ...chat, messages: [...chat.messages, sentMessage] }
           : chat
       ));
-      
+
       if (sentMessage.isQuote) {
         toast.info(`You have a new message: ${sentMessage.text}`);
       }
@@ -198,6 +198,11 @@ function Home() {
     chat.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  };
+
   return (
     <div className={styles.homeContainer}>
       <div className={styles.leftPanel}>
@@ -284,7 +289,7 @@ function Home() {
               <div className={msg.isQuote ? styles.quoteMessage : styles.chatMessage}>
                 {msg.text}
                 <div className={styles.timestamp}>
-                  {new Date(msg.createdAt).toLocaleTimeString()}
+                  {formatTime(msg.createdAt)}
                 </div>
               </div>
             </div>
