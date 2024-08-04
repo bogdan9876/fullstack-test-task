@@ -31,7 +31,8 @@ const createChat = async (req, res) => {
 
     const chat = new Chat({ name: `${firstName} ${lastName}`, participants });
     await chat.save();
-
+    chat.createdAt = chat.createdAt.toISOString();
+    chat.updatedAt = chat.updatedAt.toISOString();
     res.status(201).json({ message: 'Chat created successfully', chat });
   } catch (err) {
     console.error('Error creating chat:', err);
@@ -43,6 +44,15 @@ const getUserChats = async (req, res) => {
   try {
     const userId = req.user.id;
     const chats = await Chat.find({ participants: userId }).populate('participants', 'username email');
+    chats.forEach(chat => {
+      chat.createdAt = chat.createdAt.toISOString();
+      chat.updatedAt = chat.updatedAt.toISOString();
+      chat.messages.forEach(msg => {
+        msg.createdAt = msg.createdAt.toISOString();
+        msg.updatedAt = msg.updatedAt.toISOString();
+      });
+    });
+
     res.status(200).json(chats);
   } catch (err) {
     console.error('Error getting user chats:', err);
@@ -57,6 +67,13 @@ const getChatMessages = async (req, res) => {
     if (!chat) {
       return res.status(404).json({ error: 'Chat not found' });
     }
+
+    chat.createdAt = chat.createdAt.toISOString();
+    chat.updatedAt = chat.updatedAt.toISOString();
+    chat.messages.forEach(msg => {
+      msg.createdAt = msg.createdAt.toISOString();
+      msg.updatedAt = msg.updatedAt.toISOString();
+    });
     res.status(200).json(chat);
   } catch (err) {
     console.error('Error getting chat messages:', err);
@@ -83,7 +100,13 @@ const sendMessage = async (req, res) => {
     chat.messages.push(newMessage);
     await chat.save();
 
-    res.status(201).json({ message: 'Message sent successfully', newMessage });
+    const formattedMessages = chat.messages.map(msg => ({
+      ...msg.toObject(),
+      createdAt: msg.createdAt.toISOString(),
+      updatedAt: msg.updatedAt.toISOString(),
+    }));
+
+    res.status(201).json({ message: 'Message sent successfully', newMessage: formattedMessages[formattedMessages.length - 1] });
   } catch (err) {
     console.error('Error sending message:', err);
     res.status(500).json({ error: 'An error occurred' });
@@ -109,11 +132,17 @@ const sendQuote = async (req, res) => {
       await systemUser.save();
     }
 
-    const quoteMessage = { sender: systemUser._id, text: quote, isQuote: true }; // Set isQuote to true
+    const quoteMessage = { sender: systemUser._id, text: quote, isQuote: true };
     chat.messages.push(quoteMessage);
     await chat.save();
 
-    res.status(201).json({ message: 'Quote sent successfully', quoteMessage });
+    const formattedMessages = chat.messages.map(msg => ({
+      ...msg.toObject(),
+      createdAt: msg.createdAt ? msg.createdAt.toISOString() : null,
+      updatedAt: msg.updatedAt ? msg.updatedAt.toISOString() : null,
+    }));
+
+    res.status(201).json({ message: 'Quote sent successfully', quoteMessage: formattedMessages[formattedMessages.length - 1] });
   } catch (error) {
     console.error('Error fetching quote:', error);
     res.status(500).json({ error: 'An error occurred' });
@@ -136,6 +165,8 @@ const updateChatName = async (req, res) => {
     const { chatId } = req.params;
     const { name } = req.body;
     const updatedChat = await Chat.findByIdAndUpdate(chatId, { name }, { new: true });
+    updatedChat.createdAt = updatedChat.createdAt.toISOString();
+    updatedChat.updatedAt = updatedChat.updatedAt.toISOString();
     res.json(updatedChat);
   } catch (err) {
     console.error('Error updating chat name:', err);
