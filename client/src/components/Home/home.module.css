@@ -94,18 +94,14 @@
   clear: both;
 }
 
-
 .chatMessage {
-  background-color: #ffffff;
-  align-self: flex-start;
+  align-self: flex-end;
   text-align: left;
+  font-size: 20px;
 }
 
 .quoteMessage {
-  font-style: italic;
-  border-left: 2px solid #ccc;
-  padding-left: 10px;
-  margin: 5px 0;
+  font-size: 20px;
 }
 
 .userName {

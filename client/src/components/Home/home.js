@@ -254,14 +254,14 @@ function Home() {
           {selectedChat && messages.map((msg, index) => (
             <div
               key={index}
-              className={`${styles.message} ${msg.sender._id === token ? styles.currentUser : styles.chatMessage}`}
+              className={`${styles.message}`}
             >
               {msg.isQuote ? (
                 <div className={styles.quoteMessage}>{msg.text}</div>
               ) : (
-                <>
+                <div className={styles.chatMessage}>
                   {msg.text}
-                </>
+                </div>
               )}
             </div>
           ))}
