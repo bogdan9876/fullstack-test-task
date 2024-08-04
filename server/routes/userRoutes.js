@@ -10,4 +10,8 @@ router.get('/profile', authMiddleware, (req, res) => {
   res.status(200).json({ message: 'This is a protected route', user: req.user });
 });
 
+router.get('/hello', (req, res) => {
+  res.status(200).json({ message: 'Hello world' });
+});
+
 module.exports = router;
