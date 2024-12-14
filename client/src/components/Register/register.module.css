@@ -1,21 +1,20 @@
-.register-input {
+.registerInput {
     width: 39%;
     margin-bottom: 10px;
-    padding: 1rem 1rem 1rem 1rem;
+    padding: 1rem;
     border: none;
     border-radius: 15px;
     font-size: 32px;
-    color:black;
+    color: black;
 }
 
-.register {
+.registerTitle {
     font-size: 60px;
     margin-top: 3rem;
     text-align: center;
 }
 
-
-.register-button {
+.registerButton {
     width: fit-content;
     height: fit-content;
     padding: 14px 25px;
@@ -31,18 +30,18 @@
     margin-top: 3rem;
 }
 
-.register-container2 {
+.registerFormContainer {
     margin: 0 auto;
     padding: 20px;
     text-align: center;
 }
 
-.register-text {
+.registerText {
     font-size: 36px;
     text-align: center;
 }
 
-p.register-text span {
+.registerTextLink {
     color: red;
     font-size: 36px;
     cursor: pointer;
@@ -50,29 +49,32 @@ p.register-text span {
     margin-left: 10px;
 }
 
-.text {
+.labelText {
     text-align: center;
     font-size: 36px;
     margin-bottom: 1rem;
-    margin-right: 41rem;
 }
 
-.text7 {
-    text-align: center;
+.usernameLabel {
+    margin-right: 36rem;
     font-size: 36px;
     margin-bottom: 1rem;
-    margin-right: 37rem;
 }
 
-.text8 {
-    text-align: center;
+.emailLabel {
+    margin-right: 40rem;
     font-size: 36px;
     margin-bottom: 1rem;
-    margin-right: 29rem;
 }
 
-.text77 {
-    margin-right: 37rem;
+.passwordLabel {
+    margin-right: 36rem;
+    font-size: 36px;
+    margin-bottom: 1rem;
+}
+
+.retypePasswordLabel {
+    margin-right: 28rem;
     font-size: 36px;
     margin-bottom: 1rem;
 }

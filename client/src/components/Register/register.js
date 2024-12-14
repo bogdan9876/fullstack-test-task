@@ -51,37 +51,37 @@ const Register = () => {
 
   return (
     <>
-      <div className={styles.register}>Register</div>
+      <div className={styles.registerTitle}>Register</div>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleRegister}
       >
-        <Form className={styles['register-container2']}>
-          <p className={styles.text77}>Username</p>
-          <div className={styles['field-container']}>
-            <Field className={styles['register-input']} type="text" name="username" placeholder="Username" />
+        <Form className={styles.registerFormContainer}>
+          <p className={styles.usernameLabel}>Username</p>
+          <div className={styles.fieldContainer}>
+            <Field className={styles.registerInput} type="text" name="username" placeholder="Username" />
             <ErrorMessage name="username" component={ErrorValid} />
           </div>
-          <p className={styles.text}>Email</p>
-          <div className={styles['field-container']}>
-            <Field className={styles['register-input']} type="text" name="email" placeholder="Email" />
+          <p className={styles.emailLabel}>Email</p>
+          <div className={styles.fieldContainer}>
+            <Field className={styles.registerInput} type="text" name="email" placeholder="Email" />
             <ErrorMessage name="email" component={ErrorValid} />
           </div>
-          <p className={styles.text7}>Password</p>
-          <div className={styles['field-container']}>
-            <Field className={styles['register-input']} type="password" name="password" placeholder="*********" />
+          <p className={styles.passwordLabel}>Password</p>
+          <div className={styles.fieldContainer}>
+            <Field className={styles.registerInput} type="password" name="password" placeholder="*********" />
             <ErrorMessage name="password" component={ErrorValid} />
           </div>
-          <p className={styles.text8}>Retype password</p>
-          <div className={styles['field-container']}>
-            <Field className={styles['register-input']} type="password" name="retypePassword" placeholder="*********" />
+          <p className={styles.retypePasswordLabel}>Retype password</p>
+          <div className={styles.fieldContainer}>
+            <Field className={styles.registerInput} type="password" name="retypePassword" placeholder="*********" />
             <ErrorMessage name="retypePassword" component={ErrorValid} />
           </div>
-          <button className={styles['register-button']} type="submit">Register</button>
+          <button className={styles.registerButton} type="submit">Register</button>
         </Form>
       </Formik>
-      <p className={styles['register-text']}>Already a member? <span onClick={() => navigate('/login')}>Login</span></p>
+      <p className={styles.registerText}>Already a member? <span onClick={() => navigate('/login')} className={styles.registerTextLink}>Login</span></p>
     </>
   );
 };
