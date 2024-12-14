@@ -24,15 +24,15 @@ function Home() {
   useEffect(() => {
     const fetchChatsData = async () => {
       try {
+        const token = localStorage.getItem('accessToken');
         const chatsData = await getChats(token);
         setChats(chatsData);
       } catch (error) {
         console.error('Error fetching chats:', error.response ? error.response.data : error.message);
       }
     };
-
     fetchChatsData();
-  }, [token]);
+  }, []);
 
   const fetchMessagesData = async (chatId) => {
     try {
