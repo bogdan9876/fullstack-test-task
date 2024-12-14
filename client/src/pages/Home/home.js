@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import styles from './home.module.css';
-import {
-  getChats, getMessages, sendMessage, deleteChat, updateChatName, createChat, quoteMessage } from '../../services/homeApi.js';
-
+import { getChats, getMessages, sendMessage, deleteChat, updateChatName, createChat, quoteMessage } from '../../services/homeApi.js';
+import LogoutConfirmModal from '../../components/Modals/LogoutConfirmModal/LogoutConfirmModal.js';
+import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/ConfirmDeleteModal.js';
 const token = localStorage.getItem('accessToken');
 
 function Home() {
@@ -288,13 +288,10 @@ function Home() {
         )}
       </div>
       {showConfirmModal && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <p>Are you sure you want to delete this chat?</p>
-            <button className={`${styles.modalButton} ${styles.modalConfirm}`} onClick={handleConfirmDelete}>Confirm</button>
-            <button className={`${styles.modalButton} ${styles.modalCancel}`} onClick={() => setShowConfirmModal(false)}>Cancel</button>
-          </div>
-        </div>
+        <ConfirmDeleteModal 
+          onConfirm={handleConfirmDelete} 
+          onCancel={() => setShowConfirmModal(false)} 
+        />
       )}
       {showCreateChatModal && (
         <div className={styles.modal}>
@@ -322,13 +319,10 @@ function Home() {
         </div>
       )}
       {showLogoutConfirm && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <p>Are you sure you want to log out?</p>
-            <button className={`${styles.modalButton} ${styles.modalConfirm}`} onClick={handleConfirmLogout}>Confirm</button>
-            <button className={`${styles.modalButton} ${styles.modalCancel}`} onClick={() => setShowLogoutConfirm(false)}>Cancel</button>
-          </div>
-        </div>
+        <LogoutConfirmModal 
+          onConfirm={handleConfirmLogout} 
+          onCancel={() => setShowLogoutConfirm(false)} 
+        />
       )}
     </div>
   );
