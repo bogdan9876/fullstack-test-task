@@ -6,6 +6,7 @@ import LogoutConfirmModal from '../../components/Modals/LogoutConfirmModal/Logou
 import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/ConfirmDeleteModal.js';
 import CreateChatModal from '../../components/Modals/CreateChatModal/CreateChatModal.js';
 import ChatsList from '../../components/ChatList/ChatList.js';
+import MessageList from '../../components/MessageList/MessageList.js';
 const token = localStorage.getItem('accessToken');
 
 function Home() {
@@ -222,21 +223,7 @@ function Home() {
             <span className={styles.userName}>Select a chat</span>
           )}
         </div>
-        <div className={styles.rightPanelMain}>
-          {selectedChat && messages.map((msg, index) => (
-            <div
-              key={index}
-              className={msg.isQuote ? styles.quoteMessageContainer : styles.chatMessageContainer}
-            >
-              <div className={msg.isQuote ? styles.quoteMessage : styles.chatMessage}>
-                {msg.text}
-                <div className={styles.timestamp}>
-                  {formatTime(msg.createdAt)}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <MessageList messages={messages} />
         {selectedChat && (
           <div className={styles.rightPanelMessageInput}>
             <div className={styles.inputContainer}>

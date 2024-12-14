@@ -1,0 +1,47 @@
+.rightPanelMain {
+    flex-grow: 1;
+    overflow-y: auto;
+    border-left: 0.3px solid #ddd;
+    padding-top: 2rem;
+}
+
+.chatMessageContainer,
+.quoteMessageContainer {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+}
+
+.chatMessage {
+    align-self: flex-end;
+    text-align: right;
+    font-size: 22px;
+    background-color: #1ea1b3;
+    border-radius: 15px;
+    padding: 10px;
+    max-width: 650px;
+    color: white;
+    margin-right: 30px;
+}
+
+.quoteMessage {
+    align-self: flex-start;
+    text-align: left;
+    font-size: 22px;
+    background-color: #7cac42;
+    border-radius: 15px;
+    padding: 10px;
+    max-width: 650px;
+    margin-left: 30px;
+    color: white;
+    margin-top: 1rem;
+}
+
+.timestamp {
+    font-size: 14px;
+    color: #ffffff;
+    text-align: right;
+    margin-top: 5px;
+    align-self: flex-end;
+    opacity: 0.5;
+}
