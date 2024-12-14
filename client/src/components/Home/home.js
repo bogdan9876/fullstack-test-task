@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import styles from './home.module.css';
+import {
+  getChats, getMessages, sendMessage, deleteChat, updateChatName, createChat, quoteMessage } from '../../services/homeApi.js';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const token = localStorage.getItem('accessToken');
 
 function Home() {
   const [chats, setChats] = useState([]);
@@ -19,37 +20,24 @@ function Home() {
   const [newChatLastName, setNewChatLastName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    const fetchChats = async () => {
+    const fetchChatsData = async () => {
       try {
-        if (!token) {
-          console.error('No token found');
-          return;
-        }
-        const response = await axios.get(`${API_URL}/chats`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setChats(response.data);
+        const chatsData = await getChats(token);
+        setChats(chatsData);
       } catch (error) {
         console.error('Error fetching chats:', error.response ? error.response.data : error.message);
       }
     };
 
-    fetchChats();
+    fetchChatsData();
   }, [token]);
 
-  const fetchMessages = async (chatId) => {
+  const fetchMessagesData = async (chatId) => {
     try {
-      if (!token) {
-        console.error('No token found');
-        return;
-      }
-      const response = await axios.get(`${API_URL}/chats/${chatId}/messages`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const uniqueMessages = response.data.messages.filter((message, index, self) =>
+      const messagesData = await getMessages(chatId, token);
+      const uniqueMessages = messagesData.filter((message, index, self) =>
         index === self.findIndex((m) => (
           m.text === message.text && new Date(m.createdAt).toString() === new Date(message.createdAt).toString()
         ))
@@ -62,7 +50,7 @@ function Home() {
 
   const handleChatSelect = (chat) => {
     setSelectedChat(chat);
-    fetchMessages(chat._id);
+    fetchMessagesData(chat._id);
     setShowMenu(false);
   };
 
@@ -70,17 +58,9 @@ function Home() {
     if (!newMessage || !selectedChat) return;
 
     try {
-      if (!token) {
-        console.error('No token found');
-        return;
-      }
-      const response = await axios.post(`${API_URL}/chats/${selectedChat._id}/messages`, { text: newMessage }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const sentMessage = response.data.newMessage;
+      const sentMessage = await sendMessage(selectedChat._id, newMessage, token);
       setMessages(prevMessages => [...prevMessages, sentMessage]);
 
-      // Update the chat with the new message
       setChats(chats.map(chat =>
         chat._id === selectedChat._id
           ? { ...chat, messages: [...chat.messages, sentMessage] }
@@ -94,21 +74,17 @@ function Home() {
 
       setTimeout(async () => {
         try {
-          const quoteResponse = await axios.post(`${API_URL}/chats/${selectedChat._id}/quote`, {}, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          const quoteMessage = quoteResponse.data.quoteMessage;
-          setMessages(prevMessages => [...prevMessages, quoteMessage]);
+          const quoteMessageData = await quoteMessage(selectedChat._id, token);
+          setMessages(prevMessages => [...prevMessages, quoteMessageData]);
 
-          // Update the chat with the new quote
           setChats(chats.map(chat =>
             chat._id === selectedChat._id
-              ? { ...chat, messages: [...chat.messages, quoteMessage] }
+              ? { ...chat, messages: [...chat.messages, quoteMessageData] }
               : chat
           ));
 
-          if (quoteMessage.isQuote) {
-            toast.info(`New quoted message: ${quoteMessage.text}`);
+          if (quoteMessageData.isQuote) {
+            toast.info(`New quoted message: ${quoteMessageData.text}`);
           }
         } catch (quoteError) {
           console.error('Error fetching quote:', quoteError.response ? quoteError.response.data : quoteError.message);
@@ -145,9 +121,7 @@ function Home() {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`${API_URL}/chats/${selectedChat._id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await deleteChat(selectedChat._id, token);
       setChats(chats.filter(chat => chat._id !== selectedChat._id));
       setSelectedChat(null);
       setMessages([]);
@@ -159,11 +133,9 @@ function Home() {
 
   const handleConfirmEdit = async () => {
     try {
-      const response = await axios.put(`${API_URL}/chats/${selectedChat._id}`, { name: editChatName }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setChats(chats.map(chat => chat._id === selectedChat._id ? response.data : chat));
-      setSelectedChat(response.data);
+      const updatedChat = await updateChatName(selectedChat._id, editChatName, token);
+      setChats(chats.map(chat => chat._id === selectedChat._id ? updatedChat : chat));
+      setSelectedChat(updatedChat);
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating chat name:', error.response ? error.response.data : error.message);
@@ -172,22 +144,13 @@ function Home() {
 
   const handleCreateChat = async () => {
     try {
-      if (!token) {
-        console.error('No token found');
-        return;
-      }
       if (!newChatFirstName || !newChatLastName) {
         console.error('Both first name and last name are required');
         return;
       }
 
-      const response = await axios.post(`${API_URL}/chats/create`, {
-        firstName: newChatFirstName,
-        lastName: newChatLastName
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setChats([...chats, response.data.chat]);
+      const newChat = await createChat(newChatFirstName, newChatLastName, token);
+      setChats([...chats, newChat]);
       setShowCreateChatModal(false);
       setNewChatFirstName('');
       setNewChatLastName('');
