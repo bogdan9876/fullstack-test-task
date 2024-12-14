@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import ErrorValid from '../ErrorValid/errorValid';
-import './register.css';
+import styles from './register.module.css';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -51,37 +51,37 @@ const Register = () => {
 
   return (
     <>
-      <div className='register'>Register</div>
+      <div className={styles.register}>Register</div>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleRegister}
       >
-        <Form className='register-container2'>
-          <p className='text77'>Username</p>
-          <div className="field-container">
-            <Field className="register-input" type="text" name="username" placeholder="Username" />
+        <Form className={styles['register-container2']}>
+          <p className={styles.text77}>Username</p>
+          <div className={styles['field-container']}>
+            <Field className={styles['register-input']} type="text" name="username" placeholder="Username" />
             <ErrorMessage name="username" component={ErrorValid} />
           </div>
-          <p className='text'>Email</p>
-          <div className="field-container">
-            <Field className="register-input" type="text" name="email" placeholder="Email" />
+          <p className={styles.text}>Email</p>
+          <div className={styles['field-container']}>
+            <Field className={styles['register-input']} type="text" name="email" placeholder="Email" />
             <ErrorMessage name="email" component={ErrorValid} />
           </div>
-          <p className='text7'>Password</p>
-          <div className="field-container">
-            <Field className="register-input" type="password" name="password" placeholder="*********" />
+          <p className={styles.text7}>Password</p>
+          <div className={styles['field-container']}>
+            <Field className={styles['register-input']} type="password" name="password" placeholder="*********" />
             <ErrorMessage name="password" component={ErrorValid} />
           </div>
-          <p className='text8'>Retype password</p>
-          <div className="field-container">
-            <Field className="register-input" type="password" name="retypePassword" placeholder="*********" />
+          <p className={styles.text8}>Retype password</p>
+          <div className={styles['field-container']}>
+            <Field className={styles['register-input']} type="password" name="retypePassword" placeholder="*********" />
             <ErrorMessage name="retypePassword" component={ErrorValid} />
           </div>
-          <button className="register-button" type="submit">Register</button>
+          <button className={styles['register-button']} type="submit">Register</button>
         </Form>
       </Formik>
-      <p className='register-text'>Already a member? <span onClick={() => navigate('/login')}>Login</span></p>
+      <p className={styles['register-text']}>Already a member? <span onClick={() => navigate('/login')}>Login</span></p>
     </>
   );
 };
