@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import ErrorValid from '../ErrorValid/errorValid';
-import './login.css';
+import styles from './login.module.css';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -38,24 +38,24 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className='login'>Login</div>
+    <div className={styles.loginWrapper}>
+      <div className={styles.login}>Login</div>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleLogin}
       >
-        <Form className="input-container">
-          <p className='text4'>Email</p>
-          <Field className="login-input" type="text" name="email" placeholder="Your email" />
+        <Form className={styles.formGroup}>
+          <p className={styles.emailLabel}>Email</p>
+          <Field className={styles.inputField} type="text" name="email" placeholder="Your email" />
           <ErrorMessage name="email" component={ErrorValid} />
-          <p className='text1'>Password</p>
-          <Field className="login-input" type="password" name="password" placeholder="*********" />
+          <p className={styles.passwordLabel}>Password</p>
+          <Field className={styles.inputField} type="password" name="password" placeholder="*********" />
           <ErrorMessage name="password" component={ErrorValid} />
-          <button className="login-button" type="submit">Login</button>
+          <button className={styles.submitButton} type="submit">Login</button>
         </Form>
       </Formik>
-      <p className='login-text'>Not a member? <span onClick={() => navigate('/register')}>Register</span></p>
+      <p className={styles.registerLink}>Not a member? <span onClick={() => navigate('/register')}>Register</span></p>
     </div>
   );
 };
