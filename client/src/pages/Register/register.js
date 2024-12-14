@@ -2,10 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import ErrorValid from '../ErrorValid/errorValid';
+import ErrorValid from '../../components/ErrorValid/errorValid';
+import { registerUser } from '../../services/registerApi';
 import styles from './register.module.css';
-
-const API_URL = process.env.REACT_APP_API_URL;
 
 const Register = () => {
   const navigate = useNavigate();
@@ -28,24 +27,13 @@ const Register = () => {
 
   const handleRegister = async (values) => {
     try {
-      const response = await fetch(`${API_URL}/users/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem('registeredUser', values.email);
-        localStorage.setItem('registeredPassword', values.password);
-        navigate('/login');
-      } else {
-        alert(data.error || 'An error occurred during registration');
-      }
+      await registerUser(values);
+      localStorage.setItem('registeredUser', values.email);
+      localStorage.setItem('registeredPassword', values.password);
+      navigate('/login');
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred during registration. Please try again.');
+      alert(error.response?.data?.error || 'An error occurred during registration');
     }
   };
 

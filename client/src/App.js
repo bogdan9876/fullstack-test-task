@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import Home from './components/Home/home';
+import Home from './pages/Home/home';
 import ProtectedRoute from './utils/ProtectedRoute';
-import Login from './components/Login/login';
-import Register from './components/Register/register';
+import Login from './pages/Login/login';
+import Register from './pages/Register/register';
 
 function App() {
   return (

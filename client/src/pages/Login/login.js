@@ -1,16 +1,14 @@
 import React from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import ErrorValid from '../ErrorValid/errorValid';
+import { loginUser } from '../../services/loginApi';
+import ErrorValid from '../../components/ErrorValid/errorValid';
 import styles from './login.module.css';
-
-const API_URL = process.env.REACT_APP_API_URL;
 
 const Login = () => {
   const navigate = useNavigate();
- 
+
   const initialValues = {
     email: '',
     password: '',
@@ -23,17 +21,16 @@ const Login = () => {
 
   const handleLogin = async (values) => {
     try {
-      const response = await axios.post(`${API_URL}/users/login`, values);
-      const { token } = response.data;
-      if (token) {
-        localStorage.setItem('accessToken', token);
+      const data = await loginUser(values);
+      if (data.token) {
+        localStorage.setItem('accessToken', data.token);
         navigate('/');
       } else {
         alert('Login failed. No token received.');
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again.');
+      console.error('Error:', error.message);
+      alert(error.message);
     }
   };
 
