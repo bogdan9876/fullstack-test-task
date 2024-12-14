@@ -5,6 +5,7 @@ import { getChats, getMessages, sendMessage, deleteChat, updateChatName, createC
 import LogoutConfirmModal from '../../components/Modals/LogoutConfirmModal/LogoutConfirmModal.js';
 import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/ConfirmDeleteModal.js';
 import CreateChatModal from '../../components/Modals/CreateChatModal/CreateChatModal.js';
+import ChatsList from '../../components/ChatList/ChatList.js';
 const token = localStorage.getItem('accessToken');
 
 function Home() {
@@ -187,37 +188,11 @@ function Home() {
         </div>
         <div className={styles.leftPanelMain}>
           <div className={styles.leftPanelChatsWord}>Chats</div>
-          <div className={styles.leftPanelChatsList}>
-            {filteredChats.length > 0 ? (
-              filteredChats.map(chat => (
-                <div
-                  key={chat._id}
-                  className={styles.userListItem}
-                  onClick={() => handleChatSelect(chat)}
-                >
-                  <div className={styles.userListPhoto}>
-                    <img src="/user.svg" alt="User" className={styles.photo} />
-                  </div>
-                  <div className={styles.userListInfo}>
-                    <div className={styles.userListInfoName}>
-                      {chat.name}
-                    </div>
-                    <div className={styles.userListInfoLastMessage}>
-                      {chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].text : 'No messages yet'}
-                    </div>
-                  </div>
-                  <div className={styles.userListLastMessageTime}>
-                    {chat.messages.length > 0 ? new Date(chat.messages[chat.messages.length - 1].createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : ''}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className={styles.createChatPrompt}>
-                <div className={styles.createChatPromptQ}>No chats found. </div>
-                <button onClick={() => setShowCreateChatModal(true)}>Create Chat</button>
-              </div>
-            )}
-          </div>
+          <ChatsList
+            filteredChats={filteredChats}
+            handleChatSelect={handleChatSelect}
+            setShowCreateChatModal={setShowCreateChatModal}
+          />
         </div>
       </div>
       <div className={styles.rightPanel}>

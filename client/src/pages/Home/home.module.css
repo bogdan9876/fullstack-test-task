@@ -189,46 +189,6 @@
   cursor: pointer;
 }
 
-.userListItem {
-  display: flex;
-  align-items: center;
-  padding-left: 20px;
-  padding-right: 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.userListPhoto {
-  margin-right: 15px;
-}
-
-.photo {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-
-.userListInfo {
-  flex-grow: 1;
-  margin-right: 15px;
-}
-
-.userListInfoName {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.userListInfoLastMessage {
-  font-size: 14px;
-  color: #666;
-}
-
-.userListLastMessageTime {
-  font-size: 12px;
-  color: #999;
-}
-
 .menu {
   position: absolute;
   top: 70px;
@@ -286,27 +246,4 @@
 .cancelButton {
   background-color: #f44336;
   color: white;
-}
-
-.createChatPrompt {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 20px;
-}
-
-.createChatPromptQ {
-  margin-top: 20px;
-  text-align: center;
-  opacity: 0.3;
-}
-
-.createChatPrompt button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 15px;
-  cursor: pointer;
-  margin-top: 10px;
-  font-size: 18px;
 }
