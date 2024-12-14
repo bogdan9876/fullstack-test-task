@@ -4,6 +4,7 @@ import styles from './home.module.css';
 import { getChats, getMessages, sendMessage, deleteChat, updateChatName, createChat, quoteMessage } from '../../services/homeApi.js';
 import LogoutConfirmModal from '../../components/Modals/LogoutConfirmModal/LogoutConfirmModal.js';
 import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/ConfirmDeleteModal.js';
+import CreateChatModal from '../../components/Modals/CreateChatModal/CreateChatModal.js';
 const token = localStorage.getItem('accessToken');
 
 function Home() {
@@ -294,29 +295,14 @@ function Home() {
         />
       )}
       {showCreateChatModal && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <h2>Create New Chat</h2>
-            <input
-              type="text"
-              placeholder="First Name"
-              value={newChatFirstName}
-              onChange={(e) => setNewChatFirstName(e.target.value)}
-              className={styles.modalInput}
-            />
-            <input
-              type="text"
-              placeholder="Last Name"
-              value={newChatLastName}
-              onChange={(e) => setNewChatLastName(e.target.value)}
-              className={styles.modalInput}
-            />
-            <div className={styles.modalButtons}>
-              <button className={`${styles.modalButton} ${styles.modalConfirm}`} onClick={handleCreateChat}>Create</button>
-              <button className={`${styles.modalButton} ${styles.modalCancel}`} onClick={() => setShowCreateChatModal(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
+        <CreateChatModal 
+          newChatFirstName={newChatFirstName} 
+          setNewChatFirstName={setNewChatFirstName} 
+          newChatLastName={newChatLastName} 
+          setNewChatLastName={setNewChatLastName} 
+          handleCreateChat={handleCreateChat} 
+          setShowCreateChatModal={setShowCreateChatModal} 
+        />
       )}
       {showLogoutConfirm && (
         <LogoutConfirmModal 
