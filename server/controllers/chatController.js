@@ -174,6 +174,40 @@ const updateChatName = async (req, res) => {
   }
 };
 
+const editMessage = async (req, res) => {
+  try {
+    const { chatId, messageId } = req.params;
+    const { text } = req.body;
+    const sender = req.user.id;
+
+    if (!text) {
+      return res.status(400).json({ error: 'Message text is required' });
+    }
+
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+      return res.status(404).json({ error: 'Chat not found' });
+    }
+
+    const message = chat.messages.id(messageId);
+    if (!message) {
+      return res.status(404).json({ error: 'Message not found' });
+    }
+
+    if (message.sender.toString() !== sender) {
+      return res.status(403).json({ error: 'You can only edit your own messages' });
+    }
+
+    message.text = text;
+    await chat.save();
+
+    res.status(200).json({ message: 'Message edited successfully', updatedMessage: message });
+  } catch (err) {
+    console.error('Error editing message:', err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
 module.exports = {
   createChat,
   sendQuote,
@@ -182,4 +216,5 @@ module.exports = {
   sendMessage,
   deleteChat,
   updateChatName,
+  editMessage
 };
