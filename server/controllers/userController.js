@@ -99,6 +99,7 @@ const googleLogin = async (req, res) => {
     if (!user) {
       user = new User({ username: name, email, password: 'google-auth' });
       await user.save();
+      await createPredefinedChats(user._id);
     }
 
     const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
