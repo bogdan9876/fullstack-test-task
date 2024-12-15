@@ -173,9 +173,23 @@ function Home() {
 
     try {
       const updatedMessage = await updateMessage(selectedChat._id, editingMessage._id, editedMessageText, token);
+  
+      console.log('Updated message:', updatedMessage);
+  
+      setMessages(prevMessages => {
+        return prevMessages.map(msg =>
+          msg._id === updatedMessage.updatedMessage._id
+            ? { ...msg, ...updatedMessage.updatedMessage }
+            : msg
+        );
+      });
 
-      setMessages(messages.map(msg =>
-        msg._id === editingMessage._id ? updatedMessage : msg
+      setChats(chats.map(chat =>
+        chat._id === selectedChat._id
+          ? { ...chat, messages: chat.messages.map(msg =>
+            msg._id === updatedMessage.updatedMessage._id ? updatedMessage.updatedMessage : msg
+          ) }
+          : chat
       ));
 
       setEditingMessage(null);

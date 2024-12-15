@@ -27,14 +27,11 @@ const MessageList = ({ messages, onEdit, editingMessageId }) => {
           </div>
           <div
             className={styles.messageMenu}
-            onClick={() =>
-              editingMessageId === msg._id ? onEdit(null) : onEdit(msg)
-            }
+            onClick={() => onEdit(msg)}
           >
             {editingMessageId === msg._id ? 'X' : '···'}
           </div>
         </div>
-
       ))}
       <div ref={messagesEndRef} />
     </div>
