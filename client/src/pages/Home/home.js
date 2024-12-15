@@ -232,6 +232,10 @@ function Home() {
                 className={styles.messageInput}
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSendMessage();
+                  }}}
               />
               <img
                 src="/paper-plane.svg"
