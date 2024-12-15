@@ -1,23 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './MessageList.module.css';
 
-const MessageList = ({ messages }) => {
-
-  const messagesEndRef = useRef(null)
+const MessageList = ({ messages, onEdit, editingMessageId }) => {
+  const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    scrollToBottom()
+    scrollToBottom();
   }, [messages]);
 
   return (
     <div className={styles.rightPanelMain}>
-      {messages.map((msg, index) => (
+      {messages.map((msg) => (
         <div
-          key={index}
+          key={msg._id}
           className={msg.isQuote ? styles.quoteMessageContainer : styles.chatMessageContainer}
         >
           <div className={msg.isQuote ? styles.quoteMessage : styles.chatMessage}>
@@ -26,7 +25,16 @@ const MessageList = ({ messages }) => {
               {new Date(msg.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
             </div>
           </div>
+          <div
+            className={styles.messageMenu}
+            onClick={() =>
+              editingMessageId === msg._id ? onEdit(null) : onEdit(msg)
+            }
+          >
+            {editingMessageId === msg._id ? 'X' : '···'}
+          </div>
         </div>
+
       ))}
       <div ref={messagesEndRef} />
     </div>

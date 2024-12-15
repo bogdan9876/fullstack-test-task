@@ -74,6 +74,20 @@ const quoteMessage = async (chatId, token) => {
   return response.data.quoteMessage;
 };
 
+const updateMessage = async (chatId, messageId, newText, token) => {
+  try {
+    const response = await axios.put(`${API_URL}/chats/${chatId}/messages/${messageId}`, 
+      { text: newText }, 
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error('Error updating message: ' + error.response?.data?.error || error.message);
+  }
+};
+
 export {
   getChats,
   getMessages,
@@ -81,5 +95,6 @@ export {
   deleteChat,
   updateChatName,
   createChat,
-  quoteMessage
+  quoteMessage,
+  updateMessage
 };

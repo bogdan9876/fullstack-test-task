@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import styles from './home.module.css';
-import { getChats, getMessages, sendMessage, deleteChat, updateChatName, createChat, quoteMessage } from '../../services/homeApi.js';
+import { getChats, getMessages, sendMessage, deleteChat, updateChatName, createChat, quoteMessage, updateMessage } from '../../services/homeApi.js';
 import LogoutConfirmModal from '../../components/Modals/LogoutConfirmModal/LogoutConfirmModal.js';
 import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/ConfirmDeleteModal.js';
 import CreateChatModal from '../../components/Modals/CreateChatModal/CreateChatModal.js';
@@ -22,6 +22,9 @@ function Home() {
   const [newChatLastName, setNewChatLastName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [editingMessage, setEditingMessage] = useState(null);
+  const [editedMessageText, setEditedMessageText] = useState('');
+
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
@@ -165,6 +168,23 @@ function Home() {
     chat.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleEditMessage = async () => {
+    if (!editingMessage || !editedMessageText) return;
+
+    try {
+      const updatedMessage = await updateMessage(selectedChat._id, editingMessage._id, editedMessageText, token);
+
+      setMessages(messages.map(msg =>
+        msg._id === editingMessage._id ? updatedMessage : msg
+      ));
+
+      setEditingMessage(null);
+      setEditedMessageText('');
+    } catch (error) {
+      console.error('Error updating message:', error.response ? error.response.data : error.message);
+    }
+  };
+
   const formatTime = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
@@ -222,26 +242,40 @@ function Home() {
             <span className={styles.userName}>Select a chat</span>
           )}
         </div>
-        <MessageList messages={messages} />
+        <MessageList
+          messages={messages}
+          onEdit={(msg) => {
+            setEditingMessage(msg);
+            setEditedMessageText(msg.text);
+          }}
+          editingMessageId={editingMessage ? editingMessage._id : null}
+        />
         {selectedChat && (
           <div className={styles.rightPanelMessageInput}>
             <div className={styles.inputContainer}>
               <input
                 type="text"
-                placeholder="Type a message..."
+                placeholder={editingMessage ? "Edit your message..." : "Type a message..."}
                 className={styles.messageInput}
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
+                value={editingMessage ? editedMessageText : newMessage}
+                onChange={(e) => {
+                  if (editingMessage) {
+                    setEditedMessageText(e.target.value);
+                  } else {
+                    setNewMessage(e.target.value);
+                  }
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    handleSendMessage();
-                  }}}
+                    editingMessage ? handleEditMessage() : handleSendMessage();
+                  }
+                }}
               />
               <img
                 src="/paper-plane.svg"
                 alt="Send"
                 className={styles.paperPlane}
-                onClick={handleSendMessage}
+                onClick={editingMessage ? handleEditMessage : handleSendMessage}
               />
             </div>
           </div>
@@ -254,25 +288,25 @@ function Home() {
         )}
       </div>
       {showConfirmModal && (
-        <ConfirmDeleteModal 
-          onConfirm={handleConfirmDelete} 
-          onCancel={() => setShowConfirmModal(false)} 
+        <ConfirmDeleteModal
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setShowConfirmModal(false)}
         />
       )}
       {showCreateChatModal && (
-        <CreateChatModal 
-          newChatFirstName={newChatFirstName} 
-          setNewChatFirstName={setNewChatFirstName} 
-          newChatLastName={newChatLastName} 
-          setNewChatLastName={setNewChatLastName} 
-          handleCreateChat={handleCreateChat} 
-          setShowCreateChatModal={setShowCreateChatModal} 
+        <CreateChatModal
+          newChatFirstName={newChatFirstName}
+          setNewChatFirstName={setNewChatFirstName}
+          newChatLastName={newChatLastName}
+          setNewChatLastName={setNewChatLastName}
+          handleCreateChat={handleCreateChat}
+          setShowCreateChatModal={setShowCreateChatModal}
         />
       )}
       {showLogoutConfirm && (
-        <LogoutConfirmModal 
-          onConfirm={handleConfirmLogout} 
-          onCancel={() => setShowLogoutConfirm(false)} 
+        <LogoutConfirmModal
+          onConfirm={handleConfirmLogout}
+          onCancel={() => setShowLogoutConfirm(false)}
         />
       )}
     </div>
