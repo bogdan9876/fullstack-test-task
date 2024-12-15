@@ -7,7 +7,6 @@ import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/Confi
 import CreateChatModal from '../../components/Modals/CreateChatModal/CreateChatModal.js';
 import ChatsList from '../../components/ChatList/ChatList.js';
 import MessageList from '../../components/MessageList/MessageList.js';
-const token = localStorage.getItem('accessToken');
 
 function Home() {
   const [chats, setChats] = useState([]);
@@ -23,11 +22,11 @@ function Home() {
   const [newChatLastName, setNewChatLastName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
     const fetchChatsData = async () => {
       try {
-        const token = localStorage.getItem('accessToken');
         const chatsData = await getChats(token);
         setChats(chatsData);
       } catch (error) {

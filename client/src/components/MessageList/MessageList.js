@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './MessageList.module.css';
 
 const MessageList = ({ messages }) => {
+
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages]);
+
   return (
     <div className={styles.rightPanelMain}>
       {messages.map((msg, index) => (
@@ -17,6 +28,7 @@ const MessageList = ({ messages }) => {
           </div>
         </div>
       ))}
+      <div ref={messagesEndRef} />
     </div>
   );
 };
