@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import styles from './home.module.css';
-import { useNavigate } from 'react-router-dom';
 import { getChats, getMessages, sendMessage, deleteChat, updateChatName, createChat, quoteMessage, updateMessage, fetchUserData } from '../../services/homeApi.js';
 import LogoutConfirmModal from '../../components/Modals/LogoutConfirmModal/LogoutConfirmModal.js';
 import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/ConfirmDeleteModal.js';
@@ -211,21 +210,24 @@ function Home() {
     setEditedMessageText('');
   };
 
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-  };
+  // const formatTime = (dateString) => {
+  //   const date = new Date(dateString);
+  //   return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  // };
 
   return (
     <div className={styles.homeContainer}>
       <div className={styles.leftPanel}>
         <div className={styles.leftPanelHeaderSection}>
           <div className={styles.leftPanelHeader}>
-            <img
-              src={user?.picture || "/user.svg"}
-              alt="User"
-              className={styles.userPhoto}
-            />
+            <div className={styles.leftPanelUserData}>
+              <img
+                src={user?.picture ? `data:image/jpeg;base64,${user.picture}` : '/user.svg'}
+                alt="User"
+                className={styles.userPhoto}
+              />
+              <div className={styles.leftPanelUsername}>{user?.username}</div>
+            </div>
             <button className={styles.logoutButton} onClick={handleLogout}>Log Out</button>
           </div>
           <input

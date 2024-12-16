@@ -1,11 +1,8 @@
-const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
 const Chat = require('../models/Chat');
 const axios = require('axios');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const getOrCreateUser = async (username) => {
   let user = await User.findOne({ username });
@@ -93,11 +90,12 @@ const googleLogin = async (req, res) => {
       `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`
     );
 
-    const { email, name, picture } = googleResponse.data;
+    const { email, name, picture = '' } = googleResponse.data;
+    const base64Picture = picture ? await convertImageToBase64(picture) : null;
 
     let user = await User.findOne({ email });
     if (!user) {
-      user = new User({ username: name, email, password: 'google-auth', picture: picture });
+      user = new User({ username: name, email, password: 'google-auth', picture: base64Picture });
       await user.save();
       await createPredefinedChats(user._id);
     }
@@ -108,6 +106,13 @@ const googleLogin = async (req, res) => {
     console.error('Google Login Error:', error.message);
     res.status(500).json({ error: 'Google Login Failed' });
   }
+};
+
+
+const convertImageToBase64 = async (imageUrl) => {
+  const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+  const buffer = Buffer.from(response.data, 'binary');
+  return buffer.toString('base64');
 };
 
 const getCurrentUser = async (req, res) => {

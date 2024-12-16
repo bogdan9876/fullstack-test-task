@@ -22,6 +22,16 @@
   margin-bottom: 20px;
 }
 
+.leftPanelUserData {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.leftPanelUsername {
+  font-size: 28px;
+}
+
 .userPhoto {
   width: 50px;
   height: 50px;
@@ -41,7 +51,6 @@
 .userInput {
   width: 100%;
   padding: 10px;
-  margin-top: 10px;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-sizing: border-box;
