@@ -19,21 +19,21 @@ const MessageList = ({ messages, onEdit, editingMessageId, onCancelEdit }) => {
           key={msg._id}
           className={msg.isQuote ? styles.quoteMessageContainer : styles.chatMessageContainer}
         >
-          <div className={msg.isQuote ? styles.quoteMessage : styles.chatMessage}>
-            {msg.text}
-            <div className={styles.timestamp}>
-              {new Date(msg.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
-            </div>
-          </div>
           <div
             className={styles.messageMenu}
-            onClick={() => 
-              editingMessageId === msg._id 
+            onClick={() =>
+              editingMessageId === msg._id
                 ? onCancelEdit()
                 : onEdit(msg)
             }
           >
             {editingMessageId === msg._id ? 'X' : '···'}
+          </div>
+          <div className={msg.isQuote ? styles.quoteMessage : styles.chatMessage}>
+            {msg.text}
+            <div className={styles.timestamp}>
+              {new Date(msg.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+            </div>
           </div>
         </div>
       ))}

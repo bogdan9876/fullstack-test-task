@@ -13,6 +13,7 @@
 }
 
 .chatMessage {
+    display: inline-block;
     align-self: flex-end;
     text-align: right;
     font-size: 22px;
@@ -25,6 +26,7 @@
 }
 
 .quoteMessage {
+    display: flex;
     align-self: flex-start;
     text-align: left;
     font-size: 22px;
@@ -44,4 +46,8 @@
     margin-top: 5px;
     align-self: flex-end;
     opacity: 0.5;
+}
+
+.messageMenu {
+    display: inline-block;
 }
