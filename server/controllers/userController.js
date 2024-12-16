@@ -110,8 +110,29 @@ const googleLogin = async (req, res) => {
   }
 };
 
+const getCurrentUser = async (req, res) => {
+  try {
+    const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({
+      username: user.username,
+      email: user.email,
+      picture: user.picture
+    });
+  } catch (err) {
+    console.error('Error fetching current user:', err);
+    res.status(500).json({ error: 'Failed to fetch user data' });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
-  googleLogin
+  googleLogin,
+  getCurrentUser
 };

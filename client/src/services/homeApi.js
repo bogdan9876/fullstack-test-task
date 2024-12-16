@@ -88,6 +88,19 @@ const updateMessage = async (chatId, messageId, newText, token) => {
   }
 };
 
+const fetchUserData = async (token) => {
+  try {
+    const { data } = await axios.get(`${API_URL}/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error) {
+    throw new Error('Error fetching user data: ' + error.message);
+  }
+};
+
 export {
   getChats,
   getMessages,
@@ -96,5 +109,6 @@ export {
   updateChatName,
   createChat,
   quoteMessage,
-  updateMessage
+  updateMessage,
+  fetchUserData
 };

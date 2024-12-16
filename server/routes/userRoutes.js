@@ -6,6 +6,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
 router.post('/google-login', userController.googleLogin);
+router.get('/me', userController.getCurrentUser);
 
 router.get('/profile', authMiddleware, (req, res) => {
   res.status(200).json({ message: 'This is a protected route', user: req.user });

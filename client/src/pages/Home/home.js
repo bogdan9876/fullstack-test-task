@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import styles from './home.module.css';
-import { getChats, getMessages, sendMessage, deleteChat, updateChatName, createChat, quoteMessage, updateMessage } from '../../services/homeApi.js';
+import { useNavigate } from 'react-router-dom';
+import { getChats, getMessages, sendMessage, deleteChat, updateChatName, createChat, quoteMessage, updateMessage, fetchUserData } from '../../services/homeApi.js';
 import LogoutConfirmModal from '../../components/Modals/LogoutConfirmModal/LogoutConfirmModal.js';
 import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/ConfirmDeleteModal.js';
 import CreateChatModal from '../../components/Modals/CreateChatModal/CreateChatModal.js';
@@ -24,6 +25,7 @@ function Home() {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [editingMessage, setEditingMessage] = useState(null);
   const [editedMessageText, setEditedMessageText] = useState('');
+  const [user, setUser] = useState(null);
 
   const token = localStorage.getItem('accessToken');
 
@@ -32,8 +34,10 @@ function Home() {
       try {
         const chatsData = await getChats(token);
         setChats(chatsData);
+        const userData = await fetchUserData(token);
+        setUser(userData);
       } catch (error) {
-        console.error('Error fetching chats:', error.response ? error.response.data : error.message);
+        console.error(error.response);
       }
     };
     fetchChatsData();
@@ -217,7 +221,11 @@ function Home() {
       <div className={styles.leftPanel}>
         <div className={styles.leftPanelHeaderSection}>
           <div className={styles.leftPanelHeader}>
-            <img src="/user.svg" alt="User" className={styles.userPhoto} />
+            <img
+              src={user?.picture || "/user.svg"}
+              alt="User"
+              className={styles.userPhoto}
+            />
             <button className={styles.logoutButton} onClick={handleLogout}>Log Out</button>
           </div>
           <input
