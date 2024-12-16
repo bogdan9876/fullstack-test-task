@@ -90,14 +90,14 @@ const googleLogin = async (req, res) => {
     const { token } = req.body;
 
     const googleResponse = await axios.get(
-      `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`
     );
 
-    const { email, name } = googleResponse.data
+    const { email, name, picture } = googleResponse.data;
 
     let user = await User.findOne({ email });
     if (!user) {
-      user = new User({ username: name, email, password: 'google-auth' });
+      user = new User({ username: name, email, password: 'google-auth', picture: picture });
       await user.save();
       await createPredefinedChats(user._id);
     }
