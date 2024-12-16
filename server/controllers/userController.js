@@ -1,6 +1,7 @@
 const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
 const Chat = require('../models/Chat');
+const axios = require('axios');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -88,12 +89,11 @@ const googleLogin = async (req, res) => {
   try {
     const { token } = req.body;
 
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+    const googleResponse = await axios.get(
+      `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`
+    );
 
-    const { email, name } = ticket.getPayload();
+    const { email, name } = googleResponse.data
 
     let user = await User.findOne({ email });
     if (!user) {

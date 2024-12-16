@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { loginUser } from '../../services/loginApi';
 import ErrorValid from '../../components/ErrorValid/errorValid';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import styles from './login.module.css';
 
@@ -36,13 +36,22 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = async (response) => {
-    try {
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
       const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/users/google-login`, {
-        token: response.credential,
+        token: tokenResponse.access_token,
       });
       localStorage.setItem('accessToken', data.token);
       navigate('/');
+    },
+    onError: () => {
+      alert('Google Login Failed');
+    },
+  });
+
+  const handleGoogleLogin = async () => {
+    try {
+      googleLogin();
     } catch (error) {
       console.error('Google Login Error:', error.message);
       alert('Google Login Failed');
@@ -68,10 +77,12 @@ const Login = () => {
             <button className={styles.submitButton} type="submit">Login</button>
           </Form>
         </Formik>
-        <GoogleLogin
-          onSuccess={handleGoogleLogin}
-          onError={() => alert('Google Login Failed')}
-        />
+        <button
+          className={styles.googleLoginButton}
+          onClick={handleGoogleLogin}
+        >
+          Sign in with Google 
+        </button>
         <p className={styles.registerLink}>Not a member? <span onClick={() => navigate('/register')}>Register</span></p>
       </div>
     </GoogleOAuthProvider>
