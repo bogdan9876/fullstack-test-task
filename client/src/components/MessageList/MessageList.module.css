@@ -29,16 +29,17 @@
     padding: 10px;
     max-width: 650px;
     border-radius: 15px;
-    color: white;
+    color: #f0f0f0;
 }
 
 .chatMessage {
-    background-color: #1ea1b3;
+    background-color: #929292;
+    color:white;
     text-align: right;
 }
 
 .quoteMessage {
-    background-color: #7cac42;
+    background-color: #3f3f3f;
     text-align: left;
 }
 

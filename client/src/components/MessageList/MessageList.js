@@ -28,7 +28,7 @@ const MessageList = ({ messages, onEdit, editingMessageId, onCancelEdit }) => {
                   editingMessageId === msg._id ? onCancelEdit() : onEdit(msg)
                 }
               >
-                {editingMessageId === msg._id ? 'X' : '···'}
+                {editingMessageId === msg._id ? 'x' : '···'}
               </div>
             )}
             <div className={msg.isQuote ? styles.quoteMessage : styles.chatMessage}>
