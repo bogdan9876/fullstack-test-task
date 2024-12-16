@@ -57,6 +57,7 @@ function Home() {
     setSelectedChat(chat);
     fetchMessagesData(chat._id);
     setShowMenu(false);
+    cancelEditingMessage();
   };
 
   const handleSendMessage = async () => {
@@ -173,9 +174,9 @@ function Home() {
 
     try {
       const updatedMessage = await updateMessage(selectedChat._id, editingMessage._id, editedMessageText, token);
-  
+
       console.log('Updated message:', updatedMessage);
-  
+
       setMessages(prevMessages => {
         return prevMessages.map(msg =>
           msg._id === updatedMessage.updatedMessage._id
@@ -186,9 +187,11 @@ function Home() {
 
       setChats(chats.map(chat =>
         chat._id === selectedChat._id
-          ? { ...chat, messages: chat.messages.map(msg =>
-            msg._id === updatedMessage.updatedMessage._id ? updatedMessage.updatedMessage : msg
-          ) }
+          ? {
+            ...chat, messages: chat.messages.map(msg =>
+              msg._id === updatedMessage.updatedMessage._id ? updatedMessage.updatedMessage : msg
+            )
+          }
           : chat
       ));
 
@@ -197,6 +200,11 @@ function Home() {
     } catch (error) {
       console.error('Error updating message:', error.response ? error.response.data : error.message);
     }
+  };
+
+  const cancelEditingMessage = () => {
+    setEditingMessage(null);
+    setEditedMessageText('');
   };
 
   const formatTime = (dateString) => {
@@ -262,6 +270,7 @@ function Home() {
             setEditingMessage(msg);
             setEditedMessageText(msg.text);
           }}
+          onCancelEdit={cancelEditingMessage}
           editingMessageId={editingMessage ? editingMessage._id : null}
         />
         {selectedChat && (

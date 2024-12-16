@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './MessageList.module.css';
 
-const MessageList = ({ messages, onEdit, editingMessageId }) => {
+const MessageList = ({ messages, onEdit, editingMessageId, onCancelEdit }) => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -27,7 +27,11 @@ const MessageList = ({ messages, onEdit, editingMessageId }) => {
           </div>
           <div
             className={styles.messageMenu}
-            onClick={() => onEdit(msg)}
+            onClick={() => 
+              editingMessageId === msg._id 
+                ? onCancelEdit()
+                : onEdit(msg)
+            }
           >
             {editingMessageId === msg._id ? 'X' : '···'}
           </div>
