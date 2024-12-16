@@ -23,11 +23,12 @@ const MessageList = ({ messages, onEdit, editingMessageId, onCancelEdit }) => {
             {!msg.isQuote && (
               <div
                 className={styles.messageMenu}
+                title="Edit message"
                 onClick={() =>
                   editingMessageId === msg._id ? onCancelEdit() : onEdit(msg)
                 }
               >
-                {editingMessageId === msg._id ? 'X' : '...'}
+                {editingMessageId === msg._id ? 'X' : '···'}
               </div>
             )}
             <div className={msg.isQuote ? styles.quoteMessage : styles.chatMessage}>
