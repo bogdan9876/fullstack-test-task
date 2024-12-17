@@ -6,7 +6,7 @@ import RightPanel from '../../components/RightPanel/RightPanel.js';
 import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/ConfirmDeleteModal.js';
 import CreateChatModal from '../../components/Modals/CreateChatModal/CreateChatModal.js';
 import LogoutConfirmModal from '../../components/Modals/LogoutConfirmModal/LogoutConfirmModal.js';
-import { getChats, getMessages, sendMessage, deleteChat, createChat, fetchUserData, updateChatName, quoteMessage } from '../../services/homeApi';
+import { getChats, getMessages, sendMessage, deleteChat, createChat, fetchUserData, updateChatName, quoteMessage, updateMessage } from '../../services/homeApi';
 
 function Home() {
   const token = localStorage.getItem('accessToken');
@@ -18,6 +18,8 @@ function Home() {
   const [editChatName, setEditChatName] = useState('');
   const [newMessage, setNewMessage] = useState('');
   const [showMenu, setShowMenu] = useState(false);
+  const [editingMessage, setEditingMessage] = useState(null);
+  const [editedMessageText, setEditedMessageText] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [uiState, setUiState] = useState({
     searchQuery: '',
@@ -52,6 +54,8 @@ function Home() {
     } catch (error) {
       toast.error('Failed to load messages.');
     }
+    setShowMenu(false);
+    cancelEditingMessage();
   };
 
   const handleSendMessage = async () => {
@@ -127,6 +131,11 @@ function Home() {
     }
   };
 
+  const cancelEditingMessage = () => {
+    setEditingMessage(null);
+    setEditedMessageText('');
+  };
+
   const handleConfirmEdit = async () => {
     try {
       const updatedChat = await updateChatName(selectedChat._id, editChatName, token);
@@ -148,6 +157,39 @@ function Home() {
     setShowMenu(!showMenu);
   };
 
+  const handleEditMessage = async () => {
+    if (!editingMessage || !editedMessageText) return;
+
+    try {
+      const updatedMessage = await updateMessage(selectedChat._id, editingMessage._id, editedMessageText, token);
+
+      console.log('Updated message:', updatedMessage);
+
+      setMessages(prevMessages => {
+        return prevMessages.map(msg =>
+          msg._id === updatedMessage.updatedMessage._id
+            ? { ...msg, ...updatedMessage.updatedMessage }
+            : msg
+        );
+      });
+
+      setChats(chats.map(chat =>
+        chat._id === selectedChat._id
+          ? {
+            ...chat, messages: chat.messages.map(msg =>
+              msg._id === updatedMessage.updatedMessage._id ? updatedMessage.updatedMessage : msg
+            )
+          }
+          : chat
+      ));
+
+      setEditingMessage(null);
+      setEditedMessageText('');
+    } catch (error) {
+      console.error('Error updating message:', error.response ? error.response.data : error.message);
+    }
+  };
+
   return (
     <div className={styles.homeContainer}>
       <LeftPanel
@@ -167,8 +209,14 @@ function Home() {
         handleSendMessage={handleSendMessage}
         handleConfirmEdit={handleConfirmEdit}
         editChatName={editChatName}
+        editingMessage={editingMessage}
+        cancelEditingMessage ={cancelEditingMessage}
         handleMenuToggle={handleMenuToggle}
+        handleEditMessage={handleEditMessage}
         setEditChatName={setEditChatName}
+        setEditedMessageText={setEditedMessageText}
+        editedMessageText={editedMessageText}
+        setEditingMessage={setEditingMessage}
         isEditing={isEditing}
         setIsEditing={setIsEditing}
       />

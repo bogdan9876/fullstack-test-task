@@ -13,7 +13,13 @@ const RightPanel = ({
   setIsEditing,
   editChatName,
   setEditChatName,
-  handleMenuToggle
+  handleMenuToggle,
+  editingMessage,
+  cancelEditingMessage,
+  setEditingMessage,
+  setEditedMessageText,
+  handleEditMessage,
+  editedMessageText
 }) => (
   <div className={styles.rightPanel}>
     <div className={styles.rightPanelHeader}>
@@ -48,25 +54,46 @@ const RightPanel = ({
         <span className={styles.userName}>Select a chat</span>
       )}
     </div>
-    <MessageList messages={messages} />
-    {selectedChat && (
-      <div className={styles.rightPanelMessageInput}>
-        <input
-          type="text"
-          placeholder="Type a message..."
-          className={styles.messageInput}
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+    <MessageList
+          messages={messages}
+          onEdit={(msg) => {
+            setEditingMessage(msg);
+            setEditedMessageText(msg.text);
+          }}
+          onCancelEdit={cancelEditingMessage}
+          setEditedMessageText={setEditedMessageText}
+          editingMessageId={editingMessage ? editingMessage._id : null}
         />
-        <img
-          src="/paper-plane.svg"
-          alt="Send"
-          className={styles.paperPlane}
-          onClick={handleSendMessage}
-        />
-      </div>
-    )}
+            {selectedChat && (
+          <div className={styles.rightPanelMessageInput}>
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                placeholder={editingMessage ? "Edit your message..." : "Type a message..."}
+                className={styles.messageInput}
+                value={editingMessage ? editedMessageText : newMessage}
+                onChange={(e) => {
+                  if (editingMessage) {
+                    setEditedMessageText(e.target.value);
+                  } else {
+                    setNewMessage(e.target.value);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    editingMessage ? handleEditMessage() : handleSendMessage();
+                  }
+                }}
+              />
+              <img
+                src="/paper-plane.svg"
+                alt="Send"
+                className={styles.paperPlane}
+                onClick={editingMessage ? handleEditMessage : handleSendMessage}
+              />
+            </div>
+          </div>
+        )}
   </div>
 );
 
