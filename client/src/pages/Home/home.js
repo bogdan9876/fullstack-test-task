@@ -6,7 +6,7 @@ import RightPanel from '../../components/RightPanel/RightPanel.js';
 import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/ConfirmDeleteModal.js';
 import CreateChatModal from '../../components/Modals/CreateChatModal/CreateChatModal.js';
 import LogoutConfirmModal from '../../components/Modals/LogoutConfirmModal/LogoutConfirmModal.js';
-import { getChats, getMessages, sendMessage, deleteChat, createChat, fetchUserData } from '../../services/homeApi';
+import { getChats, getMessages, sendMessage, deleteChat, createChat, fetchUserData, updateChatName } from '../../services/homeApi';
 
 function Home() {
   const token = localStorage.getItem('accessToken');
@@ -15,6 +15,7 @@ function Home() {
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [editChatName, setEditChatName] = useState('');
   const [uiState, setUiState] = useState({
     newMessage: '',
     searchQuery: '',
@@ -23,8 +24,7 @@ function Home() {
     showConfirmModal: false,
     showCreateChatModal: false,
     newChatFirstName: '',
-    newChatLastName: '',
-    editingMessage: null,
+    newChatLastName: ''
   });
 
   useEffect(() => {
@@ -95,8 +95,19 @@ function Home() {
     }
   };
 
+  const handleConfirmEdit = async () => {
+    try {
+      const updatedChat = await updateChatName(selectedChat._id, editChatName, token);
+      setChats(chats.map(chat => chat._id === selectedChat._id ? updatedChat : chat));
+      setSelectedChat(updatedChat);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating chat name:', error.response ? error.response.data : error.message);
+    }
+  };
+
   const handleEditChatName = () => {
-    // setEditChatName(selectedChat.name);
+    setEditChatName(selectedChat.name);
     setIsEditing(true);
   };
 
@@ -118,6 +129,9 @@ function Home() {
         newMessage={uiState.newMessage}
         setNewMessage={(value) => setUiState({ ...uiState, newMessage: value })}
         handleSendMessage={handleSendMessage}
+        handleConfirmEdit={handleConfirmEdit}
+        editChatName={editChatName}
+        setEditChatName={setEditChatName}
         isEditing={isEditing}
         setIsEditing={setIsEditing}
       />
