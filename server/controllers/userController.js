@@ -4,10 +4,16 @@ const axios = require('axios');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+function randomPassword() {
+      return Math.random().toString(36).slice(2) +
+      Math.random().toString(36)
+      .toUpperCase().slice(2);
+}
+
 const getOrCreateUser = async (username) => {
   let user = await User.findOne({ username });
   if (!user) {
-    user = new User({ username, email: `${username.toLowerCase().replace(/ /g, '')}@example.com`, password: 'password' });
+    user = new User({ username, email: `${username.toLowerCase().replace(/ /g, '')}@mail.ua`, password: randomPassword() });
     await user.save();
   }
   return user;
@@ -90,12 +96,12 @@ const googleLogin = async (req, res) => {
       `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`
     );
 
-    const { email, name, picture = '' } = googleResponse.data;
+    const { email, name, picture = '', id } = googleResponse.data;
     const base64Picture = picture ? await convertImageToBase64(picture) : null;
 
     let user = await User.findOne({ email });
     if (!user) {
-      user = new User({ username: name, email, password: 'google-auth', picture: base64Picture });
+      user = new User({ username: name, email, password: id, picture: base64Picture });
       await user.save();
       await createPredefinedChats(user._id);
     }
@@ -139,5 +145,6 @@ module.exports = {
   registerUser,
   loginUser,
   googleLogin,
-  getCurrentUser
+  getCurrentUser,
+  randomPassword
 };
