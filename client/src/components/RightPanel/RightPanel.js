@@ -13,7 +13,7 @@ const RightPanel = ({
   setIsEditing,
   editChatName,
   setEditChatName,
-  handleEditChatName
+  handleMenuToggle
 }) => (
   <div className={styles.rightPanel}>
     <div className={styles.rightPanelHeader}>
@@ -25,18 +25,24 @@ const RightPanel = ({
               <input
                 type="text"
                 value={editChatName}
+                onKeyDown={(e) => e.key === 'Enter' && handleConfirmEdit()}
                 onChange={(e) => setEditChatName(e.target.value)}
                 className={styles.editChatInput}
               />
               <div className={styles.editMenu}>
-                    <button className={styles.confirmButton} onClick={handleConfirmEdit}>Confirm</button>
-                    <button className={styles.cancelButton} onClick={() => setIsEditing(false)}>Cancel</button>
-                  </div>
+                <button
+                  className={styles.confirmButton}
+                  onClick={handleConfirmEdit}
+                >
+                    Confirm
+                </button>
+                <button className={styles.cancelButton} onClick={() => setIsEditing(false)}>Cancel</button>
+              </div>
             </>
           ) : (
             <span className={styles.userName}>{selectedChat.name}</span>
           )}
-          <span className={styles.ellipsis} onClick={handleEditChatName}>···</span>
+          <span className={styles.ellipsis} onClick={handleMenuToggle}>···</span>
         </>
       ) : (
         <span className={styles.userName}>Select a chat</span>

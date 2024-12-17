@@ -16,6 +16,8 @@ function Home() {
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editChatName, setEditChatName] = useState('');
+  const [showMenu, setShowMenu] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [uiState, setUiState] = useState({
     newMessage: '',
     searchQuery: '',
@@ -63,17 +65,17 @@ function Home() {
     }
   };
 
-  const handleDeleteChat = async () => {
-    try {
-      await deleteChat(selectedChat._id, token);
-      setChats(chats.filter(chat => chat._id !== selectedChat._id));
-      setSelectedChat(null);
-      setMessages([]);
-      setUiState({ ...uiState, showConfirmModal: false });
-      toast.success('Chat deleted.');
-    } catch (error) {
-      toast.error('Failed to delete chat.');
-    }
+  const handleDeleteChat = () => {
+    setShowConfirmModal(true);
+    setShowMenu(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    await deleteChat(selectedChat._id, token);
+    setChats(chats.filter(chat => chat._id !== selectedChat._id));
+    setSelectedChat(null);
+    setMessages([]);
+    setShowConfirmModal(false);
   };
 
   const handleCreateChat = async () => {
@@ -109,6 +111,11 @@ function Home() {
   const handleEditChatName = () => {
     setEditChatName(selectedChat.name);
     setIsEditing(true);
+    setShowMenu(false);
+  };
+
+  const handleMenuToggle = () => {
+    setShowMenu(!showMenu);
   };
 
   return (
@@ -125,19 +132,19 @@ function Home() {
       <RightPanel
         selectedChat={selectedChat}
         messages={messages}
-        handleEditChatName={handleEditChatName}
         newMessage={uiState.newMessage}
         setNewMessage={(value) => setUiState({ ...uiState, newMessage: value })}
         handleSendMessage={handleSendMessage}
         handleConfirmEdit={handleConfirmEdit}
         editChatName={editChatName}
+        handleMenuToggle={handleMenuToggle}
         setEditChatName={setEditChatName}
         isEditing={isEditing}
         setIsEditing={setIsEditing}
       />
       {uiState.showConfirmModal && (
         <ConfirmDeleteModal
-          onConfirm={handleDeleteChat}
+          onConfirm={handleConfirmDelete}
           onCancel={() => setUiState({ ...uiState, showConfirmModal: false })}
         />
       )}
@@ -151,7 +158,18 @@ function Home() {
           setShowCreateChatModal={() => setUiState({ ...uiState, showCreateChatModal: false })}
         />
       )}
-
+      {showMenu && (
+        <div className={styles.menu}>
+          <div className={styles.menuItem} onClick={handleEditChatName}>Edit chat name</div>
+          <div className={styles.menuItem} onClick={handleDeleteChat}>Delete chat</div>
+        </div>
+      )}
+      {showConfirmModal && (
+        <ConfirmDeleteModal
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setShowConfirmModal(false)}
+        />
+      )}
       {uiState.showLogoutConfirm && (
         <LogoutConfirmModal
           onConfirm={() => {
