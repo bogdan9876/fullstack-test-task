@@ -2,14 +2,35 @@ import React from 'react';
 import styles from '../../pages/Home/home.module.css';
 import MessageList from './MessageList/MessageList.js';
 
-const RightPanel = ({ selectedChat, messages, newMessage, setNewMessage, handleSendMessage, handleMenuToggle }) => (
+const RightPanel = ({
+  selectedChat,
+  messages,
+  newMessage,
+  setNewMessage,
+  handleSendMessage,
+  handleEditChatName,
+  isEditing,
+  setIsEditing
+}) => (
   <div className={styles.rightPanel}>
     <div className={styles.rightPanelHeader}>
       {selectedChat ? (
         <>
           <img src="/user.svg" alt="User" className={styles.rightUserPhoto} />
-          <span className={styles.userName}>{selectedChat.name}</span>
-          <span className={styles.ellipsis} onClick={handleMenuToggle}>···</span>
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                value={selectedChat.name}
+                onChange={(e) => handleEditChatName(e.target.value)}
+                className={styles.editChatInput}
+              />
+              <button onClick={() => setIsEditing(false)}>Confirm</button>
+            </>
+          ) : (
+            <span className={styles.userName}>{selectedChat.name}</span>
+          )}
+          <span className={styles.ellipsis} onClick={() => setIsEditing(true)}>···</span>
         </>
       ) : (
         <span className={styles.userName}>Select a chat</span>

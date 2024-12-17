@@ -14,7 +14,7 @@ function Home() {
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState(null);
-  const [showMenu, setShowMenu] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [uiState, setUiState] = useState({
     newMessage: '',
     searchQuery: '',
@@ -40,10 +40,6 @@ function Home() {
     };
     fetchData();
   }, [token]);
-
-  const handleMenuToggle = () => {
-    setShowMenu(!showMenu);
-  };
 
   const handleChatSelect = async (chat) => {
     setSelectedChat(chat);
@@ -99,6 +95,11 @@ function Home() {
     }
   };
 
+  const handleEditChatName = () => {
+    // setEditChatName(selectedChat.name);
+    setIsEditing(true);
+  };
+
   return (
     <div className={styles.homeContainer}>
       <LeftPanel
@@ -113,10 +114,12 @@ function Home() {
       <RightPanel
         selectedChat={selectedChat}
         messages={messages}
-        handleMenuToggle={handleMenuToggle}
+        handleEditChatName={handleEditChatName}
         newMessage={uiState.newMessage}
         setNewMessage={(value) => setUiState({ ...uiState, newMessage: value })}
         handleSendMessage={handleSendMessage}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
       />
       {uiState.showConfirmModal && (
         <ConfirmDeleteModal
