@@ -6,7 +6,7 @@ import RightPanel from '../../components/RightPanel/RightPanel.js';
 import ConfirmDeleteModal from '../../components/Modals/ConfirmDeleteModal/ConfirmDeleteModal.js';
 import CreateChatModal from '../../components/Modals/CreateChatModal/CreateChatModal.js';
 import LogoutConfirmModal from '../../components/Modals/LogoutConfirmModal/LogoutConfirmModal.js';
-import { getChats, getMessages, sendMessage, deleteChat, createChat, fetchUserData, updateChatName } from '../../services/homeApi';
+import { getChats, getMessages, sendMessage, deleteChat, createChat, fetchUserData, updateChatName, quoteMessage } from '../../services/homeApi';
 
 function Home() {
   const token = localStorage.getItem('accessToken');
@@ -16,10 +16,10 @@ function Home() {
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editChatName, setEditChatName] = useState('');
+  const [newMessage, setNewMessage] = useState('');
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [uiState, setUiState] = useState({
-    newMessage: '',
     searchQuery: '',
     showMenu: false,
     showLogoutConfirm: false,
@@ -55,13 +55,43 @@ function Home() {
   };
 
   const handleSendMessage = async () => {
-    if (!uiState.newMessage || !selectedChat) return;
+    if (!newMessage || !selectedChat) return;
+
     try {
-      const newMessage = await sendMessage(selectedChat._id, uiState.newMessage, token);
-      setMessages([...messages, newMessage]);
-      setUiState({ ...uiState, newMessage: '' });
+      const sentMessage = await sendMessage(selectedChat._id, newMessage, token);
+      setMessages(prevMessages => [...prevMessages, sentMessage]);
+
+      setChats(chats.map(chat =>
+        chat._id === selectedChat._id
+          ? { ...chat, messages: [...chat.messages, sentMessage] }
+          : chat
+      ));
+
+      if (sentMessage.isQuote) {
+        toast.info(`You have a new message: ${sentMessage.text}`);
+      }
+      setNewMessage('');
+
+      setTimeout(async () => {
+        try {
+          const quoteMessageData = await quoteMessage(selectedChat._id, token);
+          setMessages(prevMessages => [...prevMessages, quoteMessageData]);
+
+          setChats(chats.map(chat =>
+            chat._id === selectedChat._id
+              ? { ...chat, messages: [...chat.messages, quoteMessageData] }
+              : chat
+          ));
+
+          if (quoteMessageData.isQuote) {
+            toast.info(`New quoted message: ${quoteMessageData.text}`);
+          }
+        } catch (quoteError) {
+          console.error('Error fetching quote:', quoteError.response ? quoteError.response.data : quoteError.message);
+        }
+      }, 3000);
     } catch (error) {
-      toast.error('Failed to send message.');
+      console.error('Error sending message:', error.response ? error.response.data : error.message);
     }
   };
 
@@ -132,8 +162,8 @@ function Home() {
       <RightPanel
         selectedChat={selectedChat}
         messages={messages}
-        newMessage={uiState.newMessage}
-        setNewMessage={(value) => setUiState({ ...uiState, newMessage: value })}
+        newMessage={newMessage}
+        setNewMessage={setNewMessage}
         handleSendMessage={handleSendMessage}
         handleConfirmEdit={handleConfirmEdit}
         editChatName={editChatName}
