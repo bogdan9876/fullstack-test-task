@@ -1,6 +1,7 @@
 const Chat = require('../models/Chat');
 const User = require('../models/User');
 const axios = require('axios');
+const f = require('./userController')
 
 const createChat = async (req, res) => {
   try {
@@ -15,7 +16,7 @@ const createChat = async (req, res) => {
 
     let user = await User.findOne({ username: name });
     if (!user) {
-      user = new User({ username: name, email: `${name}@example.com`, password: 'defaultPassword' });
+      user = new User({ username: name, email: `${name}@mail.ua`, password: f.randomPassword() });
       await user.save();
     }
 
@@ -96,7 +97,7 @@ const sendMessage = async (req, res) => {
       return res.status(404).json({ error: 'Chat not found' });
     }
 
-    const newMessage = { sender, text, isQuote: false }; // Set isQuote to false
+    const newMessage = { sender, text, isQuote: false };
     chat.messages.push(newMessage);
     await chat.save();
 
@@ -126,13 +127,7 @@ const sendQuote = async (req, res) => {
     const response = await axios.get('https://zenquotes.io/api/random');
     const quote = response.data[0].q;
 
-    let systemUser = await User.findOne({ username: 'system' });
-    if (!systemUser) {
-      systemUser = new User({ username: 'system', email: 'system@example.com', password: 'defaultPassword' });
-      await systemUser.save();
-    }
-
-    const quoteMessage = { sender: systemUser._id, text: quote, isQuote: true };
+    const quoteMessage = { sender: sender, text: quote, isQuote: true };
     chat.messages.push(quoteMessage);
     await chat.save();
 
@@ -174,6 +169,40 @@ const updateChatName = async (req, res) => {
   }
 };
 
+const editMessage = async (req, res) => {
+  try {
+    const { chatId, messageId } = req.params;
+    const { text } = req.body;
+    const sender = req.user.id;
+
+    if (!text) {
+      return res.status(400).json({ error: 'Message text is required' });
+    }
+
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+      return res.status(404).json({ error: 'Chat not found' });
+    }
+
+    const message = chat.messages.id(messageId);
+    if (!message) {
+      return res.status(404).json({ error: 'Message not found' });
+    }
+
+    if (message.sender.toString() !== sender) {
+      return res.status(400).json({ error: 'You can only edit your own messages' });
+    }
+
+    message.text = text;
+    await chat.save();
+
+    res.status(200).json({ message: 'Message edited successfully', updatedMessage: message });
+  } catch (err) {
+    console.error('Error editing message:', err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
 module.exports = {
   createChat,
   sendQuote,
@@ -182,4 +211,5 @@ module.exports = {
   sendMessage,
   deleteChat,
   updateChatName,
+  editMessage
 };

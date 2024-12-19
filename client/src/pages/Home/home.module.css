@@ -1,0 +1,224 @@
+.homeContainer {
+  display: flex;
+  height: 100vh;
+}
+
+.leftPanel {
+  width: 30%;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+.leftPanelHeaderSection {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-bottom: 0.3px solid #ddd;
+}
+
+.leftPanelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.leftPanelUserData {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.leftPanelUsername {
+  font-size: 28px;
+}
+
+.userPhoto {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.logoutButton {
+  padding: 10px 15px;
+  background-color: #ff4b5c;
+  color: white;
+  border: none;
+  font-size: 18px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.userInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 20px;
+}
+
+.rightPanel {
+  width: 70%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.leftPanelChatsWord {
+  padding: 20px;
+  font-size: 20px;
+  color: red;
+}
+
+.paperPlane {
+  width: 30px;
+}
+
+.rightPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  background-color: #f0f0f0;
+  border-bottom: 0.3px solid #ddd;
+  border-left: 0.3px solid #ddd;
+}
+
+.rightUserPhoto {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+}
+
+.userName {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.ellipsis {
+  font-size: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
+  cursor: pointer;
+}
+
+.loop {
+  height: 32px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.searchInput {
+  width: 200px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+.chatAdditions {
+  margin-left: auto;
+}
+
+.rightPanelMessageInput {
+  padding: 10px;
+  border-top: 0.3px solid #ddd;
+  border-left: 0.3px solid #ddd;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.messageInput {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+.paperPlane {
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.menu {
+  position: absolute;
+  top: 70px;
+  right: 30px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.menuItem {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.menuItem:last-child {
+  border-bottom: none;
+}
+
+.menuItem:hover {
+  background-color: #f0f0f0;
+}
+
+.editChatInput {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 20px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+}
+
+.editMenu {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.confirmButton, .cancelButton {
+  padding: 10px 20px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.confirmButton {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.cancelButton {
+  background-color: #f44336;
+  color: white;
+}

@@ -1,8 +1,8 @@
 import React from 'react';
-import './errorValid.css';
+import styles from './errorValid.module.css';
 
 const ErrorValid = ({ children }) => (
-  <div className="error-main" >{children}</div>
+  <div className={styles.errorMain}>{children}</div>
 );
 
 export default ErrorValid;

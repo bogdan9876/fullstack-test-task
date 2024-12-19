@@ -1,0 +1,62 @@
+.rightPanelMain {
+    flex-grow: 1;
+    overflow-y: auto;
+    border-left: 0.3px solid #ddd;
+    padding-top: 2rem;
+}
+
+.chatMessageContainer,
+.quoteMessageContainer {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem 1.5rem;
+    position: relative;
+}
+
+.chatMessageContainer {
+    flex-direction: row-reverse;
+}
+
+.messageWrapper {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+}
+
+.chatMessage,
+.quoteMessage {
+    font-size: 22px;
+    padding: 10px;
+    max-width: 650px;
+    border-radius: 15px;
+    color: #f0f0f0;
+}
+
+.chatMessage {
+    background-color: #929292;
+    color:white;
+    text-align: right;
+}
+
+.quoteMessage {
+    background-color: #3f3f3f;
+    text-align: left;
+}
+
+.timestamp {
+    font-size: 14px;
+    color: #ffffff;
+    text-align: right;
+    margin-top: 5px;
+    align-self: flex-end;
+    opacity: 0.5;
+}
+
+.messageMenu {
+    cursor: pointer;
+    font-size: 28px;
+    vertical-align: super;
+    color: rgb(0, 0, 0);
+    margin-right: 10px;
+    margin-top: -8px;
+}

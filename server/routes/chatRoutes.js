@@ -10,5 +10,6 @@ router.post('/:chatId/messages', authMiddleware, chatController.sendMessage);
 router.delete('/:chatId', authMiddleware, chatController.deleteChat);
 router.put('/:chatId', authMiddleware, chatController.updateChatName);
 router.post('/:chatId/quote', authMiddleware, chatController.sendQuote);
+router.put('/:chatId/messages/:messageId', authMiddleware, chatController.editMessage);
 
 module.exports = router;
