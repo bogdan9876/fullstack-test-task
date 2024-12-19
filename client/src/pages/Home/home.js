@@ -21,6 +21,8 @@ function Home() {
   const [editingMessage, setEditingMessage] = useState(null);
   const [editedMessageText, setEditedMessageText] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [uiState, setUiState] = useState({
     searchQuery: '',
     showMenu: false,
@@ -151,6 +153,8 @@ function Home() {
     setEditChatName(selectedChat.name);
     setIsEditing(true);
     setShowMenu(false);
+    setIsSearching(false)
+    setSearchQuery('');
   };
 
   const handleMenuToggle = () => {
@@ -210,6 +214,10 @@ function Home() {
         handleConfirmEdit={handleConfirmEdit}
         editChatName={editChatName}
         editingMessage={editingMessage}
+        setIsSearching={setIsSearching}
+        isSearching={isSearching}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
         cancelEditingMessage ={cancelEditingMessage}
         handleMenuToggle={handleMenuToggle}
         handleEditMessage={handleEditMessage}

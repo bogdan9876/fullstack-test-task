@@ -107,13 +107,30 @@
 }
 
 .ellipsis {
-  margin-left: auto;
   font-size: 40px;
   padding-left: 15px;
   padding-right: 15px;
   cursor: pointer;
 }
 
+.loop {
+  height: 32px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.searchInput {
+  width: 200px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+.chatAdditions {
+  margin-left: auto;
+}
 
 .rightPanelMessageInput {
   padding: 10px;
