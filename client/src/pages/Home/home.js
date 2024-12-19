@@ -118,19 +118,15 @@ function Home() {
     const { newChatFirstName, newChatLastName } = uiState;
     if (!newChatFirstName || !newChatLastName) return;
 
-    try {
-      const newChat = await createChat(newChatFirstName, newChatLastName, token);
-      setChats([...chats, newChat]);
-      setUiState({
-        ...uiState,
-        newChatFirstName: '',
-        newChatLastName: '',
-        showCreateChatModal: false,
-      });
-      toast.success('Chat created.');
-    } catch (error) {
-      toast.error('Failed to create chat.');
-    }
+    const newChat = await createChat(newChatFirstName, newChatLastName, token);
+    setChats([...chats, newChat]);
+    setUiState({
+      ...uiState,
+      newChatFirstName: '',
+      searchQuery: '',
+      newChatLastName: '',
+      showCreateChatModal: false,
+    });
   };
 
   const cancelEditingMessage = () => {
@@ -218,7 +214,7 @@ function Home() {
         isSearching={isSearching}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        cancelEditingMessage ={cancelEditingMessage}
+        cancelEditingMessage={cancelEditingMessage}
         handleMenuToggle={handleMenuToggle}
         handleEditMessage={handleEditMessage}
         setEditChatName={setEditChatName}

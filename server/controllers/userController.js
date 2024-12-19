@@ -32,7 +32,7 @@ const createPredefinedChats = async (userId) => {
       await chat.save();
     }
   } catch (err) {
-    console.error('Error creating predefined chats:', err);
+    console.error('Error creating predefined chats', err);
   }
 };
 
@@ -55,9 +55,8 @@ const registerUser = async (req, res) => {
 
     await createPredefinedChats(newUser._id);
 
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(200).json({ message: 'User registered successfully' });
   } catch (err) {
-    console.error('Error registering user:', err);
     res.status(500).json({ error: 'An error occurred' });
   }
 };
@@ -72,7 +71,7 @@ const loginUser = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(400).json({ error: 'User not found' });
     }
 
     const match = await bcrypt.compare(password, user.password);
@@ -81,9 +80,9 @@ const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ message: 'Login successful', token });
+    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+    res.status(200).json({ message: 'Login successful', token, refreshToken });
   } catch (err) {
-    console.error('Error logging in user:', err);
     res.status(500).json({ error: 'An error occurred' });
   }
 };
@@ -107,13 +106,12 @@ const googleLogin = async (req, res) => {
     }
 
     const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ message: 'Google Login Successful', token: jwtToken });
+    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+    res.status(200).json({ message: 'Google Login Successful', token: jwtToken, refreshToken });
   } catch (error) {
-    console.error('Google Login Error:', error.message);
     res.status(500).json({ error: 'Google Login Failed' });
   }
 };
-
 
 const convertImageToBase64 = async (imageUrl) => {
   const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
@@ -136,15 +134,39 @@ const getCurrentUser = async (req, res) => {
       picture: user.picture
     });
   } catch (err) {
-    console.error('Error fetching current user:', err);
     res.status(500).json({ error: 'Failed to fetch user data' });
   }
 };
+
+const refreshAccessToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({ error: 'No refresh token provided' });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid refresh token' });
+    }
+
+    const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(200).json({ token: newAccessToken });
+  } catch (err) {
+    res.status(400).json({ error: 'Invalid refresh token' });
+  }
+};
+
 
 module.exports = {
   registerUser,
   loginUser,
   googleLogin,
   getCurrentUser,
-  randomPassword
+  randomPassword,
+  refreshAccessToken
 };

@@ -190,7 +190,7 @@ const editMessage = async (req, res) => {
     }
 
     if (message.sender.toString() !== sender) {
-      return res.status(403).json({ error: 'You can only edit your own messages' });
+      return res.status(400).json({ error: 'You can only edit your own messages' });
     }
 
     message.text = text;
