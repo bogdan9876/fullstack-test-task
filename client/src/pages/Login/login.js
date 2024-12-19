@@ -2,10 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { loginUser } from '../../services/loginApi';
+import { loginUser, googleLoginRequest } from '../../services/loginApi';
 import ErrorValid from '../../components/ErrorValid/errorValid';
 import { useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
 import styles from './login.module.css';
 
 const Login = () => {
@@ -38,9 +37,7 @@ const Login = () => {
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/users/google-login`, {
-        token: tokenResponse.access_token,
-      });
+      const data = await googleLoginRequest(tokenResponse.access_token);
       localStorage.setItem('accessToken', data.token);
       navigate('/');
     },

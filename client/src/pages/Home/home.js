@@ -256,6 +256,7 @@ function Home() {
         <LogoutConfirmModal
           onConfirm={() => {
             localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
             window.location.reload();
           }}
           onCancel={() => setUiState({ ...uiState, showLogoutConfirm: false })}

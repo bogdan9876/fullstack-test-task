@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from '../../pages/Home/home.module.css';
 import MessageList from './MessageList/MessageList.js';
 

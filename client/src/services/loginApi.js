@@ -10,3 +10,14 @@ export const loginUser = async (credentials) => {
     throw new Error(error.response?.data?.message || 'An error occurred during login.');
   }
 };
+
+export const googleLoginRequest = async (googleToken) => {
+  try {
+    const response = await axios.post(`${API_URL}/users/google-login`, {
+      token: googleToken,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('Google Login failed: ' + error.message);
+  }
+};
